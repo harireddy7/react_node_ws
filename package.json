@@ -16,10 +16,11 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start-client": "react-scripts start",
+    "serve": "nodemon server/index",
+    "app": "npm run start-client &&  npm run serve",
+    "start": "node server/index",
     "build": "react-scripts build",
-    "serve": "npm run build && node server/index",
-    "serve-dev": "nodemon server/index",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
