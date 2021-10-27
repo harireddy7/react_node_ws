@@ -1,0 +1,27 @@
+Content:
+
+    top header
+        show user dp
+        user name
+        other options
+    body Content
+        messages
+    footer
+        textarea + send icon button
+
+
+     ____________     ____________________________
+    |            |   |                            |
+    |            |   |       Contact Options      |
+    |            |   |____________________________|
+    |            |   |                            |
+    |            |   |                            |
+    |            |   |          messages          |
+    |    Menu    |   |                            |
+    |            |   |                            |
+    |            |   |                            |
+    |            |   |____________________________|
+    |            |   |                            |
+    |            |   |   textarea + send icon     |
+    |____________|   |____________________________|
+                        
