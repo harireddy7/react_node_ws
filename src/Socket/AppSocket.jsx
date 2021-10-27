@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import io from 'socket.io-client';
 
-const getWSURL = `http://localhost:8080/`
+const getWSURL = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:8080';
 
 export class AppSocket extends Component {
     // constructor(props) {

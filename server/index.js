@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 var corsOptions = {
-	origin: 'http://localhost:3000',
+	origin: '*',
 };
 
 app.use(cors(corsOptions));
@@ -30,7 +30,7 @@ app.use('/*', express.static(path.join(__dirname, '../build')));
 
 const io = socketIO(server, {
 	cors: {
-		origin: 'http://localhost:3000',
+		origin: '*',
 	},
 });
 
