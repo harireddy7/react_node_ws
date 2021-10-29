@@ -1,9 +1,17 @@
-const MessageContent = () => {
+import { connect } from 'react-redux';
+
+const MessageContent = ({ contact }) => {
     return (
         <div>
-            Message Content
+            Messages of {contact.name}
         </div>
     )
 }
 
-export default MessageContent
+const mapStateToProps = (state) => {
+    return {
+        contact: state.contacts.activeContact,
+    }
+}
+
+export default connect(mapStateToProps)(MessageContent);
