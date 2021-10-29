@@ -13,6 +13,9 @@ app.use(express.json());
 const whitelistUrl = 'https://pinghere.herokuapp.com/';
 var corsOptions = {
 	origin: function(origin, callback) {
+		console.log(origin);
+		console.log(process.env.NODE_ENV)
+		console.log(whitelistUrl)
 		if (process.env.NODE_ENV === 'development') {
 			callback(null, true)
 		} else if (origin === whitelistUrl) {
