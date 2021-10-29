@@ -1,11 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Home from './Pages/Home'
+import { fetchContacts } from './redux/actions/contacts';
 import AppSocket from './Socket/AppSocket';
 
-const App = () => {
+const App = ({ getContacts }) => {
   const [value, setValue] = useState('');
   const [msgRxd, setMsgRxd] = useState('');
+
+  useEffect(() => {
+    getContacts();
+  }, [])
 
   const handleChange = e => {
     setValue(e.target.value);
@@ -36,4 +42,10 @@ const App = () => {
   // )
 }
 
-export default App
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getContacts: () => dispatch(fetchContacts())
+  }
+}
+
+export default connect(null, mapDispatchToProps)(App);

@@ -25,3 +25,18 @@ Content:
     |            |   |   textarea + send icon     |
     |____________|   |____________________________|
                         
+
+
+
+
+
+// Flow
+
+1. user visits home page   =>  logins with mobile number & verified with otp   =>  send to message dahsboard
+
+2.  left side view all the recently interacted contacts
+    right side view the messaging platform
+
+3.  if contact type is single => exchange messages
+    if type is group    => broadcast messages
+

@@ -1,11 +1,15 @@
-import { Col, Menu, Row } from 'antd';
+import { Col, Menu, Row, Skeleton, Space } from 'antd';
+import Avatar from 'antd/lib/avatar/avatar';
 import Layout, { Content, Header } from 'antd/lib/layout/layout';
 import Sider from 'antd/lib/layout/Sider';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import Text from 'antd/lib/typography/Text';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import AvatarName from '../Components/AvatarName';
+import MessageView from '../Components/MessageUI/MessageView';
+import { setActiveContact } from '../redux/actions/contacts';
 
 const StyledText = styled(Text)`
 	color: ${({ color }) => color || '#fff'};
@@ -43,11 +47,32 @@ const StyledContent = styled(Content)`
     width: 80%;
 `
 
+const MenuItem = styled(Menu.Item)`
+	height: 70px !important;
+	& > span {
+		// padding: 5px;
+	}
+`
 
-const Home = ({ setUser }) => {
+const getInitials = name => {
+	const _name = name.toUpperCase().split(' ')
+	return `${_name[0].substr(0,1)}${_name.length > 1 ? _name[1].substr(0,1) : ''}`;
+}
+
+const Home = ({ contactsState, setUser, setContact }) => {
+	const { loading, data: contacts } = contactsState;
+	const [activeContact, setActiveContact] = useState();
+
 	useEffect(() => {
 		setUser();
 	}, []);
+
+	const handleMenuClick = ({ key }) => {
+		const activeContact = contacts.find(c => c.id === +key)
+		if (key && activeContact) {
+			setContact(activeContact);
+		}
+	}
 
 	return (
 		<Layout>
@@ -64,21 +89,31 @@ const Home = ({ setUser }) => {
 			<MainContent>
 				<StyledContentLayout>
 					<StyledSider width={200} breakpoint='md' collapsedWidth='0'>
-						<Menu mode='inline' defaultSelectedKeys={['5']}>
-							<Menu.Item key="1">User 1</Menu.Item>
-                            <Menu.Item key="2">User 2</Menu.Item>
-                            <Menu.Item key="3">User 3</Menu.Item>
-                            <Menu.Item key="4">User 4</Menu.Item>
-                            <Menu.Item key="5">User 5</Menu.Item>
-                            <Menu.Item key="6">User 6</Menu.Item>
-						</Menu>
+						{!loading && contacts.length && (
+							<Menu mode='inline' selectedKeys={[activeContact]} onClick={handleMenuClick}>
+								<MenuItem disabled>Search bar</MenuItem>
+								{contacts.map(contact => (
+									<MenuItem key={contact.id}>
+										<AvatarName name={contact.name} avatar={contact.avatar} />
+									</MenuItem>
+								))}
+							</Menu>
+						)}
 					</StyledSider>
-					<StyledContent>Content</StyledContent>
+					<StyledContent>
+						<MessageView />
+					</StyledContent>
 				</StyledContentLayout>
 			</MainContent>
 		</Layout>
 	);
 };
+
+const mapStateToProps = (state) => {
+	return {
+		contactsState: state.contacts,
+	}
+}
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -87,7 +122,8 @@ const mapDispatchToProps = (dispatch) => {
 				type: 'SET_USER',
 				payload: { name: 'barry allen', mobile: '9874510233' },
 			}),
+		setContact: contact => dispatch(setActiveContact(contact)),
 	};
 };
 
-export default connect(null, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

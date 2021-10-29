@@ -3,12 +3,24 @@ const express = require('express');
 const socketIO = require('socket.io');
 const cors = require('cors');
 
+// routers
+const contactsRouter = require('./routes/contacts');
+
 const app = express();
 
 app.use(express.json());
 
+const whitelistUrl = 'https://pinghere.herokuapp.com/';
 var corsOptions = {
-	origin: '*',
+	origin: function(origin, callback) {
+		if (process.env.NODE_ENV === 'development') {
+			callback(null, true)
+		} else if (origin === whitelistUrl) {
+			callback(null, true);
+		} else {
+			callback(new Error('Not allowed by CORS!'));
+		}
+	}
 };
 
 app.use(cors(corsOptions));
@@ -19,8 +31,10 @@ const server = app.listen(
 	console.log(`App is listening on port ${PORT}`)
 );
 
-// send static react bundles to browser
+// API ROUTES
+app.use('/api/v1/contacts', contactsRouter)
 
+// send static react bundles to browser
 app.use('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '../build'))
 });
