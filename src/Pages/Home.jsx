@@ -35,22 +35,31 @@ const StyledSider = styled(Sider)`
 	background: #fff;
 	height: 100%;
 	max-height: 84vh;
-	position: fixed;
 	& > .ant-layout-sider-children {
 		overflow-y: auto;
 	}
 	& > .ant-layout-sider-zero-width-trigger {
 		top: 0;
 	}
+	& > .ant-layout-sider-children::-webkit-scrollbar {
+		width: 1px;
+	}
+	& > .ant-layout-sider-children::-webkit-scrollbar-track {
+		background: transparent; 
+	}
+	& > .ant-layout-sider-children::-webkit-scrollbar-thumb {
+		background: transparent; 
+	}
+	& > .ant-layout-sider-children::-webkit-scrollbar-thumb:hover {
+		background: #555;
+	}
+	@media (max-width: 650px) {
+		position: fixed;
+	}
 `;
 
 const StyledContent = styled(Content)`
 	padding: 0 24px;
-	// overflow: auto;
-	// height: 100%;
-	// max-height: 85vh;
-	// position: fixed;
-	// right: 0;
 	width: 80%;
 `;
 
@@ -71,36 +80,18 @@ const getInitials = (name) => {
 const Home = ({ contactsState, setUser, setContact }) => {
 	const { loading, data: contacts } = contactsState;
 	const [activeContact, setActiveContact] = useState();
-	const [togglerCollapsed, setTogglerCollapsed] = useState(false);
-
-	const screens = useBreakpoint();
-	const { xs: xsBreakpoint, sm: smBreakpoint, md: mdBreakpoint } = screens;
 
 	useEffect(() => {
 		setUser();
 	}, []);
 
-	useEffect(() => {
-		if ((xsBreakpoint || smBreakpoint) && !mdBreakpoint) {
-			setTogglerCollapsed(true);
-		} else if (mdBreakpoint) {
-			setTogglerCollapsed(false)
-		}
-	}, [screens]);
-
 	const handleMenuClick = ({ key }) => {
 		const activeContact = contacts.find((c) => c.id === +key);
 		if (key && activeContact) {
 			setContact(activeContact);
+			setActiveContact(key)
 		}
-		setTogglerCollapsed(true);
 	};
-
-	const handleToggler = (collapsed, type) => {
-		if (type === 'clickTrigger') {
-			setTogglerCollapsed(collapsed)
-		}
-	}
 
 	return (
 		<Layout>
@@ -114,16 +105,13 @@ const Home = ({ contactsState, setUser, setContact }) => {
 			<MainContent>
 				<StyledContentLayout>
 					<StyledSider
-						width={200}
+						width={250}
 						breakpoint='md'
 						collapsedWidth='0'
-						onCollapse={handleToggler}
-						onBreakpoint={handleToggler}
-						collapsed={togglerCollapsed}
 					>
 						{!loading && contacts.length && (
 							<Menu mode='inline' selectedKeys={[activeContact]} onClick={handleMenuClick}>
-								<MenuItem disabled>Search bar</MenuItem>
+								<MenuItem disabled key='disabled-key'>Search bar</MenuItem>
 								{contacts.map(contact => (
 									<MenuItem key={contact.id}>
 										<AvatarName name={contact.name} avatar={contact.avatar} />
