@@ -3,16 +3,24 @@ import Avatar from 'antd/lib/avatar/avatar';
 import Text from 'antd/lib/typography/Text';
 import styled from 'styled-components';
 
+const StyledSpace = styled(Space)`
+    width: 100%;
+    cursor: pointer;
+    & .ant-space-item:nth-child(2) {
+        width: 100%;
+    }
+`
+
 const StyledAvatar = styled(Avatar)`
     position: initial;
 `
 
-const AvatarName = ({ name, avatar }) => {
+const AvatarName = ({ name, avatar, space = 'large' }) => {
     return (
-        <Space size='large' align='center'>
-            <StyledAvatar src={`https://joeschmoe.io/api/v1/${avatar}`} size={50} />
+        <StyledSpace size={space} align='center'>
+            <StyledAvatar src={avatar} size={50} />
             <Text level={3}>{name}</Text>
-        </Space>
+        </StyledSpace>
     )
 }
 

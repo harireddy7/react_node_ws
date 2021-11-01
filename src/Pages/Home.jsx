@@ -1,5 +1,4 @@
 import { Col, Menu, Row } from 'antd';
-import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import Layout, { Content, Header } from 'antd/lib/layout/layout';
 import Sider from 'antd/lib/layout/Sider';
 import Text from 'antd/lib/typography/Text';
@@ -7,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import AvatarName from '../Components/AvatarName';
-import MessageView from '../Components/MessageUI/MessageView';
+import ConversationView from '../Components/ConversationUI/ConversationView';
 import { setActiveContact } from '../redux/actions/contacts';
 
 const StyledText = styled(Text)`
@@ -86,7 +85,7 @@ const Home = ({ contactsState, setUser, setContact }) => {
 	}, []);
 
 	const handleMenuClick = ({ key }) => {
-		const activeContact = contacts.find((c) => c.id === +key);
+		const activeContact = contacts.find((c) => c.id === key);
 		if (key && activeContact) {
 			setContact(activeContact);
 			setActiveContact(key)
@@ -114,14 +113,14 @@ const Home = ({ contactsState, setUser, setContact }) => {
 								<MenuItem disabled key='disabled-key'>Search bar</MenuItem>
 								{contacts.map(contact => (
 									<MenuItem key={contact.id}>
-										<AvatarName name={contact.name} avatar={contact.avatar} />
+										<AvatarName name={contact.name} avatar={contact.image} />
 									</MenuItem>
 								))}
 							</Menu>
 						)}
 					</StyledSider>
 					<StyledContent>
-						<MessageView />
+						<ConversationView />
 					</StyledContent>
 				</StyledContentLayout>
 			</MainContent>
