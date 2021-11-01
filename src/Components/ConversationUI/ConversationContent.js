@@ -18,10 +18,11 @@ const MessageContainer = styled.div`
 `;
 
 const Message = styled.div`
-	width: 60%;
+	width: auto;
+	min-width: 80px;
 	max-width: 420px;
 	padding: 8px 12px 10px;
-	margin: 10px 0;
+	margin-bottom: 10px;
     background: ${({ type }) => (type === 'SENT' ? '#d3eebe' : '#d9e5cf')};
 	border-radius: 0 8px 8px;
 	position: relative;
@@ -37,7 +38,13 @@ const Message = styled.div`
             border-bottom: 5px solid transparent;
             border-left: 10px solid ${type === 'SENT' ? '#d3eebe' : 'transparent'};
         }
-    `}
+	`}
+	@media (max-width: 500px) {
+		width: 70%;
+	}
+	@media (min-width: 768px) and (max-width: 1024px) {
+		max-width: 250px;
+	}
 `;
 
 const MessageTime = styled(Text)`

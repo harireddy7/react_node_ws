@@ -34,6 +34,12 @@ const StyledContent = styled(Content)`
     ::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
+    @media (min-width: 1200px) {
+        padding: 0 50px;
+    }
+    @media (min-width: 1440px) {
+        padding: 0 100px;
+    }
 `
 
 const DoodleUnderlay = styled.div`
@@ -52,7 +58,10 @@ const StyledFooter = styled(Footer)`
     border-radius: 0 0 8px 8px;
     background: #f5f7f4;
     padding: 15px 20px;
-    z-index: 999;
+    z-index: 99;
+    @media (max-width: 425px) {
+		padding: 5px 10px;
+	}
 `
 
 const ConversationView = ({ activeContact }) => {
@@ -77,7 +86,7 @@ const ConversationView = ({ activeContact }) => {
     }
 
     return (
-        <Layout style={{ height: '100%', borderRadius: '8px 8px 0 0', position: 'relative' }}>
+        <Layout style={{ height: '100%', borderRadius: '8px', position: 'relative' }}>
             <DoodleUnderlay />
             <StyledHeader>
                 <MessageHeader contact={activeContact} />

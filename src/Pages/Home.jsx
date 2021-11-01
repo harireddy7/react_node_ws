@@ -13,11 +13,20 @@ const StyledText = styled(Text)`
 	color: ${({ color }) => color || '#fff'};
 `;
 
+const StyledHeader = styled(Header)`
+	@media (max-width: 425px) {
+		padding: 0 20px;
+	}
+`
+
 const MainContent = styled(Content)`
 	padding: 0 50px;
 	height: calc(100vh - 64px);
 	@media (max-width: 767px) {
 		padding: 0 10px;
+	}
+	@media (max-width: 425px) {
+		padding: 0;
 	}
 `;
 
@@ -28,10 +37,15 @@ const StyledContentLayout = styled(Layout)`
 	height: calc(100% - 54px);
 	border-radius: 8px;
 	display: flex;
+	@media (max-width: 425px) {
+		margin: 0;
+		height: 100%;
+	}
 `;
 
 const StyledSider = styled(Sider)`
 	background: #fff;
+	z-index: 9999;
 	height: 100%;
 	max-height: 84vh;
 	& > .ant-layout-sider-children {
@@ -55,11 +69,19 @@ const StyledSider = styled(Sider)`
 	@media (max-width: 650px) {
 		position: fixed;
 	}
+	@media (min-width: 1200px) {
+		flex: 0 0 350px !important;
+		max-width: 350px !important;
+        width: 350px !important;
+    }
 `;
 
 const StyledContent = styled(Content)`
 	padding: 0 24px;
 	width: 80%;
+	@media (max-width: 425px) {
+		padding: 0 10px;
+	}
 `;
 
 const MenuItem = styled(Menu.Item)`
@@ -94,13 +116,13 @@ const Home = ({ contactsState, setUser, setContact }) => {
 
 	return (
 		<Layout>
-			<Header>
+			<StyledHeader>
 				<Row>
 					<Col span={8}>
 						<StyledText strong>PingHere</StyledText>
 					</Col>
 				</Row>
-			</Header>
+			</StyledHeader>
 			<MainContent>
 				<StyledContentLayout>
 					<StyledSider
