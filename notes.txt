@@ -40,3 +40,12 @@ Content:
 3.  if contact type is single => exchange messages
     if type is group    => broadcast messages
 
+// login to home Flow
+
+1. user submits mobile number from client => make api call to fetch tokens
+
+2. /api/v1/login =>
+    
+    a) takes in mobile number
+    b) send otp to number & send verify link
+    c) post verification, send tokens to client

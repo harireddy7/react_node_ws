@@ -1,23 +1,22 @@
-import { Col, Menu, Row } from 'antd';
-import Layout, { Content, Header } from 'antd/lib/layout/layout';
+import { Menu } from 'antd';
+import Layout, { Content } from 'antd/lib/layout/layout';
 import Sider from 'antd/lib/layout/Sider';
-import Text from 'antd/lib/typography/Text';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import AvatarName from '../Components/AvatarName';
 import ConversationView from '../Components/ConversationUI/ConversationView';
-import { setActiveContact } from '../redux/actions/contacts';
+import { fetchContacts, setActiveContact } from '../redux/actions/contacts';
 
-const StyledText = styled(Text)`
-	color: ${({ color }) => color || '#fff'};
-`;
+// const StyledText = styled(Text)`
+// 	color: ${({ color }) => color || '#fff'};
+// `;
 
-const StyledHeader = styled(Header)`
-	@media (max-width: 425px) {
-		padding: 0 20px;
-	}
-`
+// const StyledHeader = styled(Header)`
+// 	@media (max-width: 425px) {
+// 		padding: 0 20px;
+// 	}
+// `
 
 const MainContent = styled(Content)`
 	padding: 0 50px;
@@ -91,20 +90,20 @@ const MenuItem = styled(Menu.Item)`
 	}
 `;
 
-const getInitials = (name) => {
-	const _name = name.toUpperCase().split(' ');
-	return `${_name[0].substr(0, 1)}${
-		_name.length > 1 ? _name[1].substr(0, 1) : ''
-	}`;
-};
+const Home = ({ contactsState, setContact, getContacts, history }) => {
 
-const Home = ({ contactsState, setUser, setContact }) => {
 	const { loading, data: contacts } = contactsState;
 	const [activeContact, setActiveContact] = useState();
 
 	useEffect(() => {
-		setUser();
-	}, []);
+		const userObj = JSON.parse(localStorage.getItem('user'));
+		if (userObj) {
+			getContacts(userObj.id);
+		} else {
+			localStorage.removeItem('user');
+			history.push('/login');
+		}
+	  }, [getContacts])
 
 	const handleMenuClick = ({ key }) => {
 		const activeContact = contacts.find((c) => c.id === key);
@@ -115,38 +114,29 @@ const Home = ({ contactsState, setUser, setContact }) => {
 	};
 
 	return (
-		<Layout>
-			<StyledHeader>
-				<Row>
-					<Col span={8}>
-						<StyledText strong>PingHere</StyledText>
-					</Col>
-				</Row>
-			</StyledHeader>
-			<MainContent>
-				<StyledContentLayout>
-					<StyledSider
-						width={250}
-						breakpoint='md'
-						collapsedWidth='0'
-					>
-						{!loading && contacts.length && (
-							<Menu mode='inline' selectedKeys={[activeContact]} onClick={handleMenuClick}>
-								<MenuItem disabled key='disabled-key'>Search bar</MenuItem>
-								{contacts.map(contact => (
-									<MenuItem key={contact.id}>
-										<AvatarName name={contact.name} avatar={contact.image} />
-									</MenuItem>
-								))}
-							</Menu>
-						)}
-					</StyledSider>
-					<StyledContent>
-						<ConversationView />
-					</StyledContent>
-				</StyledContentLayout>
-			</MainContent>
-		</Layout>
+		<MainContent>
+			<StyledContentLayout>
+				<StyledSider
+					width={250}
+					breakpoint='md'
+					collapsedWidth='0'
+				>
+					{!loading && contacts.length && (
+						<Menu mode='inline' selectedKeys={[activeContact]} onClick={handleMenuClick}>
+							<MenuItem disabled key='disabled-key'>Search bar</MenuItem>
+							{contacts.map(contact => (
+								<MenuItem key={contact.id}>
+									<AvatarName name={contact.name} avatar={contact.image} />
+								</MenuItem>
+							))}
+						</Menu>
+					)}
+				</StyledSider>
+				<StyledContent>
+					<ConversationView />
+				</StyledContent>
+			</StyledContentLayout>
+		</MainContent>
 	);
 };
 
@@ -158,12 +148,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setUser: () =>
-			dispatch({
-				type: 'SET_USER',
-				payload: { name: 'barry allen', mobile: '9874510233' },
-			}),
 		setContact: (contact) => dispatch(setActiveContact(contact)),
+		getContacts: (id) => dispatch(fetchContacts(id)),
 	};
 };
 

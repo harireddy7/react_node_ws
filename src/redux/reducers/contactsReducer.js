@@ -12,7 +12,7 @@ const INTI_STORE = {
 
 */
 
-export default function(state = INTI_STORE, { type, payload }) {
+function contactsReducer(state = INTI_STORE, { type, payload }) {
     switch(type) {
         case SET_CONTACTS_LOADING:
             return {
@@ -42,3 +42,5 @@ export default function(state = INTI_STORE, { type, payload }) {
             return state;
     }
 }
+
+export default contactsReducer;

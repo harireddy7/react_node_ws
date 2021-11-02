@@ -4,13 +4,14 @@ const socketIO = require('socket.io');
 const cors = require('cors');
 
 // routers
+const usersRouter = require('./routes/users');
 const contactsRouter = require('./routes/contacts');
 
 const app = express();
 
 app.use(express.json());
 
-const whitelistUrl = 'https://pinghere.herokuapp.com/';
+const whitelistUrl = 'https://impulse-chat.herokuapp.com/';
 var corsOptions = {
 	origin: function(origin, callback) {
 		if (process.env.NODE_ENV === 'development') {
@@ -32,7 +33,8 @@ const server = app.listen(
 );
 
 // API ROUTES
-app.use('/api/v1/contacts', contactsRouter)
+app.use('/api/v1/user', usersRouter);
+app.use('/api/v1/contacts', contactsRouter);
 
 // send static react bundles to browser
 app.use('/*', (req, res) => {
@@ -49,19 +51,19 @@ const io = socketIO(server, {
 });
 
 io.on('connection', (socket) => {
-	console.log('new connection made...');
-	// console.log(socket);
+	console.log('new connection made...SOCKET ID:: ', socket.id);
 
-	socket.emit('connected');
+	// handle new connection
+	// socket.emit('connected to ImpulseChat');
 
 	// DISCONNECT
-	socket.on('disconnect', (reason) => {
-		console.log(`socket disconnected due to ${reason}`);
+	socket.on('disconnect', () => {
+		io.emit('message', 'User has left the chat!');
     });
-    
-
-    socket.on('chat-message', data => {
-        socket.broadcast.emit('message-received', data);
-    })
+	
+	// handle chat message from client
+    socket.on('chatMessage', data => {
+        socket.broadcast.emit('message', data);
+	})
 
 });

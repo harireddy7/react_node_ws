@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Empty } from 'antd';
