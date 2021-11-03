@@ -2,13 +2,14 @@ import { connect } from 'react-redux';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import Text from 'antd/lib/typography/Text';
 import styled from 'styled-components';
+import { formatTimestamp } from '../../utils';
+import { useContext, useEffect } from 'react';
+import { SocketContext } from '../ImpulseSocket';
 
 // f5f7fb
 // rx: #d9e5cf, sent: #d3eebe
 
-const ConversationContainer = styled.div`
-
-`
+const ConversationContainer = styled.div``;
 
 const MessageContainer = styled.div`
 	display: flex;
@@ -23,7 +24,7 @@ const Message = styled.div`
 	max-width: 420px;
 	padding: 8px 12px 10px;
 	margin-bottom: 10px;
-    background: ${({ type }) => (type === 'SENT' ? '#d3eebe' : '#d9e5cf')};
+	background: ${({ type }) => (type === 'SENT' ? '#d3eebe' : '#d9e5cf')};
 	border-radius: 0 8px 8px;
 	position: relative;
 	${({ type }) => `
@@ -34,9 +35,13 @@ const Message = styled.div`
             top: 0;
             ${type === 'SENT' ? 'right: -10px;' : 'left: -10px'};
             border-top: 10px solid ${type === 'SENT' ? '#d3eebe' : '#d9e5cf'};
-            border-right: 10px solid ${type === 'SENT' ? 'transparent' : '#d9e5cf'};
+            border-right: 10px solid ${
+							type === 'SENT' ? 'transparent' : '#d9e5cf'
+						};
             border-bottom: 5px solid transparent;
-            border-left: 10px solid ${type === 'SENT' ? '#d3eebe' : 'transparent'};
+            border-left: 10px solid ${
+							type === 'SENT' ? '#d3eebe' : 'transparent'
+						};
         }
 	`}
 	@media (max-width: 500px) {
@@ -76,8 +81,8 @@ const messages = [
 		type: 'RECEIVED',
 		text: 'pumped!',
 		timestamp: '9:53 pm',
-    },
-    {
+	},
+	{
 		type: 'RECEIVED',
 		text: 'hello from this contact!\n how are you?',
 		timestamp: '9:43 pm',
@@ -96,8 +101,8 @@ const messages = [
 		type: 'RECEIVED',
 		text: 'pumped!',
 		timestamp: '9:53 pm',
-    },
-    {
+	},
+	{
 		type: 'RECEIVED',
 		text: 'hello from this contact!\n how are you?',
 		timestamp: '9:43 pm',
@@ -116,8 +121,8 @@ const messages = [
 		type: 'RECEIVED',
 		text: 'pumped!',
 		timestamp: '9:53 pm',
-    },
-    {
+	},
+	{
 		type: 'RECEIVED',
 		text: 'hello from this contact!\n how are you?',
 		timestamp: '9:43 pm',
@@ -139,15 +144,26 @@ const messages = [
 	},
 ];
 
-const MessageContent = ({ contact }) => {
+const MessageContent = ({ chatMessages, userId, receiverId }) => {
+	// const { socket } = useContext(SocketContext);
+	// useEffect(() => {
+	// 	if (!socket) return;
+
+	// 	socket.on('outputMessage', (data) => {
+	// 		console.log(data);
+	// 	});
+	// 	return () => socket.off('outputMessage');
+	// }, []);
 
 	return (
 		<ConversationContainer>
-			{messages.map((message, index) => (
+			{chatMessages.map((message, index) => (
 				<MessageContainer key={index} type={message.type}>
 					<Message type={message.type}>
 						<Paragraph>{message.text}</Paragraph>
-						<MessageTime type='secondary'>{message.timestamp}</MessageTime>
+						<MessageTime type='secondary'>
+							{formatTimestamp(message.timestamp)}
+						</MessageTime>
 					</Message>
 				</MessageContainer>
 			))}
@@ -156,8 +172,12 @@ const MessageContent = ({ contact }) => {
 };
 
 const mapStateToProps = (state) => {
+	const { chats } = state;
+	const chatMessages = chats.data?.[chats.activeChat] || [];
 	return {
-		contact: state.contacts.activeContact,
+		chatMessages,
+		userId: state.user.data.mobile,
+		receiverId: state.chats.activeChat,
 	};
 };
 

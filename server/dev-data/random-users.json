@@ -1,8 +1,8 @@
 [
     {
         "id": "7a6f1e5a-ac23-4c04-a551-8f326f258ee0",
-        "name": "Barry Allen",
-        "mobile": "650)-464-1254",
+        "name": "Ravi",
+        "mobile": "7036269649",
         "image": "https://randomuser.me/api/portraits/men/1.jpg"
     },
     {
@@ -13,8 +13,8 @@
     },
     {
         "id": "ab817a72-4863-498c-99e0-9f874710d596",
-        "name": "Bruce Wayne",
-        "mobile": "891)-190-9987",
+        "name": "sai kumar",
+        "mobile": "8333826506",
         "image": "https://randomuser.me/api/portraits/men/9.jpg"
     },
     {
@@ -25,38 +25,38 @@
     },
     {
         "id": "b29121b9-bfc4-4591-ae5f-8ca5df22f0ef",
-        "name": "Clark Kent",
-        "mobile": "502)-449-8244",
+        "name": "basaVa",
+        "mobile": "8919403543",
         "image": "https://randomuser.me/api/portraits/men/20.jpg"
     },
     {
         "id": "112c8bd9-86bf-4e93-93e2-4c2b0108fea2",
-        "name": "Kara Danvers",
-        "mobile": "799)-313-6533",
-        "image": "https://randomuser.me/api/portraits/women/67.jpg"
+        "name": "Vamsi",
+        "mobile": "9108701101",
+        "image": "https://randomuser.me/api/portraits/men/67.jpg"
     },
     {
         "id": "b9e82128-3325-4914-a6fe-477344dc76a1",
-        "name": "Hal Jordan",
-        "mobile": "393)-050-8517",
+        "name": "barry allen",
+        "mobile": "9330508517",
         "image": "https://randomuser.me/api/portraits/men/75.jpg"
     },
     {
         "id": "fa78049a-3d9c-4c63-917d-3a46f5090d81",
-        "name": "John Jones",
-        "mobile": "408)-409-4915",
+        "name": "Manoj",
+        "mobile": "9618251161",
         "image": "https://randomuser.me/api/portraits/men/49.jpg"
     },
     {
         "id": "047400af-95cc-4aa5-921b-624a9016afda",
         "name": "Billy Batson",
-        "mobile": "370)-127-3539",
+        "mobile": "7301273539",
         "image": "https://randomuser.me/api/portraits/men/81.jpg"
     },
     {
         "id": "c36b2810-c94b-41e0-9847-b5b8e9845f81",
         "name": "Oliver Queen",
-        "mobile": "953)-504-2372",
+        "mobile": "9535042372",
         "image": "https://randomuser.me/api/portraits/men/88.jpg"
     }
 ]

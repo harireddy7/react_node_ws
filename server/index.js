@@ -6,6 +6,7 @@ const cors = require('cors');
 // routers
 const usersRouter = require('./routes/users');
 const contactsRouter = require('./routes/contacts');
+const chatsRouter = require('./routes/chats');
 
 const app = express();
 
@@ -34,6 +35,7 @@ const server = app.listen(
 
 // API ROUTES
 app.use('/api/v1/user', usersRouter);
+app.use('/api/v1/chats', chatsRouter);
 app.use('/api/v1/contacts', contactsRouter);
 
 // send static react bundles to browser
@@ -51,19 +53,22 @@ const io = socketIO(server, {
 });
 
 io.on('connection', (socket) => {
-	console.log('new connection made...SOCKET ID:: ', socket.id);
+	// console.log('new connection made...SOCKET ID:: ', socket.id);
+	const id = socket.handshake.query.id;
+	socket.join(id);
 
-	// handle new connection
-	// socket.emit('connected to ImpulseChat');
-
-	// DISCONNECT
-	socket.on('disconnect', () => {
-		io.emit('message', 'User has left the chat!');
-    });
-	
 	// handle chat message from client
-    socket.on('chatMessage', data => {
-        socket.broadcast.emit('message', data);
+    socket.on('inputMessage', data => {
+		const { text, sender, receiver, timestamp } = data;
+		const emitObj = {
+			text,
+			sender,
+			receiver,
+			timestamp,
+		}
+		socket.broadcast.to(receiver).emit('outputMessage', emitObj);
+		
+        // socket.broadcast.emit('output', data);
 	})
 
 });

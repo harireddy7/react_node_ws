@@ -1,14 +1,11 @@
-import { Component } from 'react';
-import io from 'socket.io-client';
+import { useContext, useState } from 'react';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
 import TextArea from 'antd/lib/input/TextArea';
 import SendOutlined from '@ant-design/icons/SendOutlined';
 import { Button } from 'antd';
-import styled from 'styled-components';
-
-const WS_URL =
-	process.env.NODE_ENV === 'production'
-		? window.location.origin
-		: 'http://localhost:8080';
+import { SocketContext } from '../ImpulseSocket';
+import { updateChatMessages } from '../../redux/actions/chats';
 
 const FlexContainer = styled.div`
 	display: flex;
@@ -54,62 +51,64 @@ const SendMessageButton = styled(Button)`
 	}
 `;
 
-class ConversationInput extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			userMessage: '',
-		};
-		this.messageFromServer = this.messageFromServer.bind(this);
-	}
+const ConversationInput = ({ userId, activeChatId, allChats, updateChat }) => {
+	const [userMessage, setUserMessage] = useState('');
 
-	componentDidMount() {
-		this.socket = io.connect(WS_URL, {
-			query: {},
-			reconnection: true,
-		});
+	const { socket } = useContext(SocketContext);
 
-		this.socket.on('connected', () => {
-			console.log('connected to socket!');
-		});
-
-		this.socket.on('message', (data) => {
-			this.messageFromServer(data);
-		});
-	}
-
-	handleChange = (e) => {
-		this.setState({ userMessage: e.target.value });
+	const handleChange = (e) => {
+		setUserMessage(e.target.value);
 	};
 
-	messageFromServer(msg) {
-        // console.log(this.socket)
-		console.log('Server: ', msg);
-	}
+	const handleSendMessage = () => {
+		const convoObj = {
+			text: userMessage,
+			sender: userId,
+			receiver: activeChatId,
+			timestamp: Date.now(),
+		}
 
-	handleSendMessage = () => {
-        // console.log(this.socket)
-        // this.setState({ userMessage: this.state.value });
-        this.socket.emit('chatMessage', this.state.userMessage)
+		updateChat({
+			data: convoObj,
+			allChats,
+			type: 'SENT',
+		});
+
+		if (socket) {
+			socket.emit('inputMessage', convoObj);
+		}
+		setUserMessage('');
 	};
 
-	render() {
-		const { userMessage } = this.state;
-		return (
-			<FlexContainer>
-				<MessageArea
-					placeholder='Send a message...'
-					autoSize={{ minRows: 1, maxRows: 2 }}
-					value={userMessage}
-					onChange={this.handleChange}
-				/>
-				<SendMessageButton
-					icon={<SendOutlined />}
-					onClick={this.handleSendMessage}
-				/>
-			</FlexContainer>
-		);
+	return (
+		<FlexContainer>
+			<MessageArea
+				placeholder='Send a message...'
+				autoSize={{ minRows: 1, maxRows: 2 }}
+				value={userMessage}
+				onChange={handleChange}
+			/>
+			<SendMessageButton
+				icon={<SendOutlined />}
+				onClick={handleSendMessage}
+			/>
+		</FlexContainer>
+	);
+
+}
+
+const mapStateToProps = state => {
+	return {
+		allChats: state.chats.data || {},
+		userId: state.user.data?.mobile,
+		activeChatId: state.chats.activeChat,
 	}
 }
 
-export default ConversationInput;
+const mapDispatchToProps = dispatch => {
+	return {
+		updateChat: (payload) => dispatch(updateChatMessages(payload))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConversationInput);

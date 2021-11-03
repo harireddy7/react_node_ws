@@ -64,7 +64,7 @@ const StyledFooter = styled(Footer)`
 	}
 `
 
-const ConversationView = ({ activeContact }) => {
+const ConversationView = ({ activeChat }) => {
 
     useEffect(() => {
         const convoContent = document.getElementById('conversation-content');
@@ -75,9 +75,9 @@ const ConversationView = ({ activeContact }) => {
                 // behavior: 'smooth'
             });
         }
-    }, [activeContact])
+    }, [activeChat])
 
-    if (!activeContact) {
+    if (!activeChat) {
         return (
             <Layout style={{ height: '100%', borderRadius: '8px', justifyContent: 'center', alignItems: 'center' }}>
                 <Empty image={NoMessagesSvg} imageStyle={{ height: 200, marginBottom: 20 }} description='Select a chat to view messages!' />
@@ -89,7 +89,7 @@ const ConversationView = ({ activeContact }) => {
         <Layout style={{ height: '100%', borderRadius: '8px', position: 'relative' }}>
             <DoodleUnderlay />
             <StyledHeader>
-                <MessageHeader contact={activeContact} />
+                <MessageHeader contact={activeChat} />
             </StyledHeader>
             <StyledContent id='conversation-content'>
                 <MessageContent />
@@ -102,8 +102,10 @@ const ConversationView = ({ activeContact }) => {
 }
 
 const mapStateToProps = (state) => {
+    const { contacts, chats } = state;
+    const activeChat = contacts?.data?.find(c => c.mobile === chats.activeChat);
     return {
-        activeContact: state.contacts.activeContact,
+        activeChat,
     }
 }
 

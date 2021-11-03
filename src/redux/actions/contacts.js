@@ -1,5 +1,10 @@
 import { axiosInstance } from '../../config/axiosInstance';
-import { SET_ACTIVE_CONTACT, SET_CONTACTS_FAILURE, SET_CONTACTS_LOADING, SET_CONTACTS_SUCCESS } from '../types';
+import {
+    SET_ACTIVE_CONTACT,
+    SET_CONTACTS_FAILURE,
+    SET_CONTACTS_LOADING,
+    SET_CONTACTS_SUCCESS,
+} from '../types';
 
 export const fetchContacts = (id) => (dispatch) => {
     dispatch({

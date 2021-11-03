@@ -1,0 +1,62 @@
+{
+    "7097907102": [
+        {
+            "_id": "message-1-77804",
+            "text": "Hello there",
+            "sender": "7780487254",
+            "timestamp": 1635919094371,
+            "type": "SENT"
+        },
+        {
+            "_id": "message-2-77804",
+            "text": "how are you?",
+            "sender": "7780487254",
+            "timestamp": 1635919109999,
+            "type": "SENT"
+        },
+        {
+            "_id": "message-3-70979",
+            "text": "Hi, im good",
+            "sender": "7097907102",
+            "timestamp": 1635936128010,
+            "type": "RECEIVED"
+        },
+        {
+            "_id": "message-4-70979",
+            "text": "how are you doing?",
+            "sender": "7097907102",
+            "timestamp": 1635936141647,
+            "type": "RECEIVED"
+        }
+    ],
+    "7036269649": [
+        {
+            "_id": "message-1-703626",
+            "text": "hi vamshi",
+            "sender": "7036269649",
+            "timestamp": 1635923167777,
+            "type": "RECEIVED"
+        },
+        {
+            "_id": "message-2-77804",
+            "text": "Hi",
+            "sender": "7780487254",
+            "timestamp": 1635923179659,
+            "type": "SENT"
+        },
+        {
+            "_id": "message-3-703626",
+            "text": "ela unnav?",
+            "sender": "7036269649",
+            "timestamp": 1635923203534,
+            "type": "RECEIVED"
+        },
+        {
+            "_id": "message-4-77804",
+            "text": "Im good\n how are you?",
+            "sender": "7780487254",
+            "timestamp": 1635923235756,
+            "type": "SENT"
+        }
+    ]
+}

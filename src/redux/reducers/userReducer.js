@@ -1,4 +1,4 @@
-import { GET_USER_FAILURE, GET_USER_LOADING, GET_USER_SUCCESS, SET_USER } from '../types';
+import { GET_USER_FAILURE, GET_USER_LOADING, GET_USER_SUCCESS, SET_LOGGED_USER } from '../types';
 
 const INTI_STORE = {
     data: null,
@@ -8,10 +8,12 @@ const INTI_STORE = {
 
 function userReducer(state = INTI_STORE, { type, payload }) {
     switch(type) {
-        case SET_USER:
+        case SET_LOGGED_USER:
             return {
                 ...state,
-                ...payload,
+                loading: false,
+                error: false,
+                data: payload,
             }
         case GET_USER_LOADING:
             return {

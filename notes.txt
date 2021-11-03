@@ -49,3 +49,23 @@ Content:
     a) takes in mobile number
     b) send otp to number & send verify link
     c) post verification, send tokens to client
+
+
+/*
+
+    sender_id: "xxxxxx",
+    messages: [
+        {
+            "id1": [
+                {
+                    "_id": "xxx-xxx-xxx",
+                    "text": "xxxxxxxxxxxxxxxxx",
+                    "sender": "xxx-xxxx-xxxxx-xxxxx",
+                    "timestamp": "xxxxxx"
+                }
+            ]
+        }
+    ],
+    contacts: []
+
+*/

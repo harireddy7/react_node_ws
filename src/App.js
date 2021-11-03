@@ -19,13 +19,13 @@ const StyledHeader = styled(Header)`
 	}
 `;
 
-const App = ({ contactsState, setUser }) => {
+const App = ({ contactsState, userState }) => {
 	// const { loading, data: contacts } = contactsState;
 	// const [activeContact, setActiveContact] = useState();
 
-	useEffect(() => {
-		setUser();
-	}, [setUser]);
+	// useEffect(() => {
+	// 	setUser();
+	// }, [setUser]);
 
 	return (
 		<Layout>
@@ -33,6 +33,10 @@ const App = ({ contactsState, setUser }) => {
 				<Row>
 					<Col span={8}>
 						<StyledText strong>ImpulseChat</StyledText>
+					</Col>
+					<Col span={12}></Col>
+					<Col span={4}>
+						<StyledText strong>{userState?.data?.name}</StyledText>
 					</Col>
 				</Row>
 			</StyledHeader>
@@ -48,7 +52,7 @@ const App = ({ contactsState, setUser }) => {
 
 const mapStateToProps = (state) => {
 	return {
-		contactsState: state.contacts,
+		userState: state.user,
 	};
 };
 

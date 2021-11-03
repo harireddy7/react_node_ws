@@ -1,12 +1,12 @@
-import { Menu } from 'antd';
-import Layout, { Content } from 'antd/lib/layout/layout';
-import Sider from 'antd/lib/layout/Sider';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import AvatarName from '../Components/AvatarName';
+import Layout, { Content } from 'antd/lib/layout/layout';
+import Sider from 'antd/lib/layout/Sider';
 import ConversationView from '../Components/ConversationUI/ConversationView';
-import { fetchContacts, setActiveContact } from '../redux/actions/contacts';
+import Sidebar from '../Components/Sidebar/Sidebar';
+import { setLoggedUser } from '../redux/actions/user';
+import ImpulseSocket from '../Components/ImpulseSocket';
 
 // const StyledText = styled(Text)`
 // 	color: ${({ color }) => color || '#fff'};
@@ -57,10 +57,10 @@ const StyledSider = styled(Sider)`
 		width: 1px;
 	}
 	& > .ant-layout-sider-children::-webkit-scrollbar-track {
-		background: transparent; 
+		background: transparent;
 	}
 	& > .ant-layout-sider-children::-webkit-scrollbar-thumb {
-		background: transparent; 
+		background: transparent;
 	}
 	& > .ant-layout-sider-children::-webkit-scrollbar-thumb:hover {
 		background: #555;
@@ -71,8 +71,8 @@ const StyledSider = styled(Sider)`
 	@media (min-width: 1200px) {
 		flex: 0 0 350px !important;
 		max-width: 350px !important;
-        width: 350px !important;
-    }
+		width: 350px !important;
+	}
 `;
 
 const StyledContent = styled(Content)`
@@ -83,73 +83,45 @@ const StyledContent = styled(Content)`
 	}
 `;
 
-const MenuItem = styled(Menu.Item)`
-	height: 70px !important;
-	& > span {
-		// padding: 5px;
-	}
-`;
-
-const Home = ({ contactsState, setContact, getContacts, history }) => {
-
-	const { loading, data: contacts } = contactsState;
-	const [activeContact, setActiveContact] = useState();
+const Home = ({ contactsState, userId, setUser, history }) => {
 
 	useEffect(() => {
 		const userObj = JSON.parse(localStorage.getItem('user'));
-		if (userObj) {
-			getContacts(userObj.id);
-		} else {
+		if (!userObj) {
 			localStorage.removeItem('user');
 			history.push('/login');
+		} else {
+			setUser(userObj);
 		}
-	  }, [getContacts])
+	}, []);
 
-	const handleMenuClick = ({ key }) => {
-		const activeContact = contacts.find((c) => c.id === key);
-		if (key && activeContact) {
-			setContact(activeContact);
-			setActiveContact(key)
-		}
-	};
+	const receiveMsgFromServer = (data) => {}
 
 	return (
-		<MainContent>
-			<StyledContentLayout>
-				<StyledSider
-					width={250}
-					breakpoint='md'
-					collapsedWidth='0'
-				>
-					{!loading && contacts.length && (
-						<Menu mode='inline' selectedKeys={[activeContact]} onClick={handleMenuClick}>
-							<MenuItem disabled key='disabled-key'>Search bar</MenuItem>
-							{contacts.map(contact => (
-								<MenuItem key={contact.id}>
-									<AvatarName name={contact.name} avatar={contact.image} />
-								</MenuItem>
-							))}
-						</Menu>
-					)}
-				</StyledSider>
-				<StyledContent>
-					<ConversationView />
-				</StyledContent>
-			</StyledContentLayout>
-		</MainContent>
+		<ImpulseSocket id={userId}>
+			<MainContent>
+				<StyledContentLayout>
+					<StyledSider width={250} breakpoint='md' collapsedWidth='0'>
+						<Sidebar />
+					</StyledSider>
+					<StyledContent>
+						<ConversationView />
+					</StyledContent>
+				</StyledContentLayout>
+			</MainContent>
+		</ImpulseSocket>
 	);
 };
 
 const mapStateToProps = (state) => {
 	return {
-		contactsState: state.contacts,
-	};
-};
+		userId: state.user?.data?.mobile,
+	}
+}
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setContact: (contact) => dispatch(setActiveContact(contact)),
-		getContacts: (id) => dispatch(fetchContacts(id)),
+		setUser: (user) => dispatch(setLoggedUser(user)),
 	};
 };
 

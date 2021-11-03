@@ -1,36 +1,35 @@
-import { SET_ACTIVE_CONTACT, SET_CONTACTS_FAILURE, SET_CONTACTS_LOADING, SET_CONTACTS_SUCCESS } from '../types';
+import { SET_ACTIVE_CHAT, SET_CHATS_FAILURE, SET_CHATS_LOADING, SET_CHATS_SUCCESS } from '../types';
 
 const INTI_STORE = {
     loading: false,
     data: null,
     error: false,
-    activeContact: null,
+    activeChat: null,
 };
 
-function contactsReducer(state = INTI_STORE, { type, payload }) {
+function chatsReducer(state = INTI_STORE, { type, payload }) {
     switch(type) {
-        case SET_CONTACTS_LOADING:
+        case SET_CHATS_LOADING:
             return {
                 ...state,
                 loading: true,
             }
-        case SET_CONTACTS_SUCCESS:
+        case SET_CHATS_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 data: payload,
             }
-        case SET_CONTACTS_FAILURE:
+        case SET_CHATS_FAILURE:
             return {
                 ...state,
                 loading: false,
                 error: true,
-                data: []
             }
-        case SET_ACTIVE_CONTACT: {
+        case SET_ACTIVE_CHAT: {
             return {
                 ...state,
-                activeContact: payload,
+                activeChat: payload,
             }
         }
         default:
@@ -38,4 +37,4 @@ function contactsReducer(state = INTI_STORE, { type, payload }) {
     }
 }
 
-export default contactsReducer;
+export default chatsReducer;

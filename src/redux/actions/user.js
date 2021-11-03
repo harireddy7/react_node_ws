@@ -1,5 +1,5 @@
 import { axiosInstance } from '../../config/axiosInstance';
-import { GET_USER_LOADING, GET_USER_SUCCESS, GET_USER_FAILURE } from '../types';
+import { SET_LOGGED_USER, GET_USER_LOADING, GET_USER_SUCCESS, GET_USER_FAILURE } from '../types';
 
 export const fetchLoggedUser = (id, history) => (dispatch) => {
     dispatch({
@@ -20,3 +20,8 @@ export const fetchLoggedUser = (id, history) => (dispatch) => {
         });
     })
 }
+
+export const setLoggedUser = payload => ({
+    type: SET_LOGGED_USER,
+    payload,
+});
