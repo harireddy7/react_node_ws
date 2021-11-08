@@ -6,6 +6,12 @@
         "image": "https://randomuser.me/api/portraits/men/1.jpg"
     },
     {
+        "id": "047400af-95cc-4aa5-921b-624a9016afda",
+        "name": "Ganesh Reddy",
+        "mobile": "9676066179",
+        "image": "https://randomuser.me/api/portraits/men/81.jpg"
+    },
+    {
         "id": "1cef625a-8552-4a92-a990-4965bba0664c",
         "name": "Vamshi Reddy",
         "mobile": "7780487254",
@@ -46,12 +52,6 @@
         "name": "Manoj",
         "mobile": "9618251161",
         "image": "https://randomuser.me/api/portraits/men/49.jpg"
-    },
-    {
-        "id": "047400af-95cc-4aa5-921b-624a9016afda",
-        "name": "Billy Batson",
-        "mobile": "7301273539",
-        "image": "https://randomuser.me/api/portraits/men/81.jpg"
     },
     {
         "id": "c36b2810-c94b-41e0-9847-b5b8e9845f81",
