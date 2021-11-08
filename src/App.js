@@ -5,9 +5,12 @@ import styled from 'styled-components';
 import { Col, Row } from 'antd';
 import Layout, { Header } from 'antd/lib/layout/layout';
 import Text from 'antd/lib/typography/Text';
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
-
+import { checkIfMobile, getFirstName } from './utils';
+import Conversation from './Pages/Conversation';
+import ImpulseSocket from './Components/ImpulseSocket';
 
 const StyledText = styled(Text)`
 	color: ${({ color }) => color || '#fff'};
@@ -20,29 +23,31 @@ const StyledHeader = styled(Header)`
 `;
 
 const App = ({ contactsState, userState }) => {
-	// const { loading, data: contacts } = contactsState;
-	// const [activeContact, setActiveContact] = useState();
-
-	// useEffect(() => {
-	// 	setUser();
-	// }, [setUser]);
+	const screens = useBreakpoint();
+	const isMobile = checkIfMobile(screens);
+	const pathname = window.location.pathname
 
 	return (
-		<Layout>
-			<StyledHeader>
-				<Row>
-					<Col span={8}>
-						<StyledText strong>ImpulseChat</StyledText>
-					</Col>
-					<Col span={12}></Col>
-					<Col span={4}>
-						<StyledText strong>{userState?.data?.name}</StyledText>
-					</Col>
-				</Row>
-			</StyledHeader>
+		<Layout id='main-app-layout'>
+			{(!isMobile || (isMobile && pathname === '/')) && (
+				<StyledHeader>
+					<Row>
+						<Col span={8}>
+							<StyledText strong>ImpulseChat</StyledText>
+						</Col>
+						<Col span={8} />
+						<Col span={8}>
+							<StyledText strong>
+								{userState?.data?.name && getFirstName(userState?.data?.name)}
+							</StyledText>
+						</Col>
+					</Row>
+				</StyledHeader>
+			)}
 			<Router>
 				<Switch>
 					<Route path='/login' component={Login} />
+					<Route path='/chat/:mobile' component={Conversation} />
 					<Route path='/' component={Home} />
 				</Switch>
 			</Router>

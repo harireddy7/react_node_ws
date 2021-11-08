@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Tabs } from 'antd';
@@ -8,6 +8,7 @@ import { fetchChats, setActiveChat } from '../../redux/actions/chats';
 import { fetchContacts } from '../../redux/actions/contacts';
 import ChatsList from './ChatsList';
 import ContactsList from './ContactsList';
+import { SocketContext } from '../ImpulseSocket';
 
 const SidebarContainer = styled.div`
 	& .ant-tabs-nav-list {
@@ -35,23 +36,21 @@ const Sidebar = ({ contactsState, chatsState, getContacts, getChats }) => {
 		const { data: contacts } = contactsState;
 		const { data: chats } = chatsState;
 
-		// if (activeTab === '1') {
-			if (
-				!contactsState.loading &&
-				!contactsState.error &&
-				!Array.isArray(contacts)
-			) {
-				getContacts(id);
-			}
-		// } else if (activeTab === '2') {
-			if (
-				!chatsState.loading &&
-				!chatsState.error &&
-				!chats
-			) {
-				getChats(id);
-			}
-		// }
+		if (
+			!contactsState.loading &&
+			!contactsState.error &&
+			!Array.isArray(contacts)
+		) {
+			getContacts(id);
+		}
+		if (
+			!chatsState.loading &&
+			!chatsState.error &&
+			!chats
+		) {
+			getChats(id);
+		}
+
 	}, []);
 
 	return (

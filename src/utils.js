@@ -28,3 +28,13 @@ export const insertIntoMessages = ({ data, allChats = {}, type }) => {
 
     return revisedChats;
 };
+
+export const getFirstName = name => {
+    return name.split(' ')[0]
+}
+
+export const checkIfMobile = screens => {
+	const breakpoints = Object.keys(screens).filter(scr => screens[scr]);
+    const activeBreakpoint = breakpoints[breakpoints.length - 1];
+    return ['sm', 'xs'].includes(activeBreakpoint);
+}

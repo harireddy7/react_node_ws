@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import io from 'socket.io-client';
@@ -11,7 +12,7 @@ const WS_URL =
 
 export const SocketContext = React.createContext();
 
-const ImpulseSocket = ({ id, children, allChats, updateChat }) => {
+const ImpulseSocket = ({ id, children, allChats, activeChat, allContacts, updateChat }) => {
     const [socket, setSocket] = useState();
 
     useEffect(() => {
@@ -29,6 +30,17 @@ const ImpulseSocket = ({ id, children, allChats, updateChat }) => {
     useEffect(() => {
         if (socket) {
             socket.on('outputMessage', data => {
+                /*
+                    show notification, only if message received from is not activeChat
+                */
+
+                if (activeChat !== data.sender) {
+                    notification.open({
+                        message: allContacts.find(c => c.mobile === data.sender)?.name || 'New Message',
+                        description: data.text,
+                        duration: 2
+                    })
+                }
                 updateChat({
                     data,
                     allChats,
@@ -40,7 +52,7 @@ const ImpulseSocket = ({ id, children, allChats, updateChat }) => {
         return () => {
             if (socket) socket.off('outputMessage');
         }
-    }, [socket, allChats])
+    }, [socket, allChats, allContacts])
 
 
     return (
@@ -52,7 +64,9 @@ const ImpulseSocket = ({ id, children, allChats, updateChat }) => {
 
 const mapStateToProps = state => {
 	return {
-		allChats: state.chats.data || {},
+        allChats: state.chats.data || {},
+        activeChat: state.chats.activeChat,
+        allContacts: state.contacts.data || [],
 	};
 }
 

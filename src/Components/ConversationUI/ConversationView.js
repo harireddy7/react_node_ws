@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Empty } from 'antd';
 import Layout, { Content, Footer, Header } from 'antd/lib/layout/layout';
-import MessageContent from './ConversationContent';
-import MessageHeader from './ConversationHeader';
-import MessageInput from './ConversationInput';
+import ConversationContent from './ConversationContent';
+import ConversationHeader from './ConversationHeader';
+import ConversationInput from './ConversationInput';
 import NoMessagesSvg from '../../assets/no_messages.svg';
 import doodleBg from '../../assets/doodle-wallpaper.jpg'
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import { checkIfMobile } from '../../utils';
 
 const StyledHeader = styled(Header)`
     background: #f5f7f4;
@@ -18,7 +20,7 @@ const StyledHeader = styled(Header)`
 
 const StyledContent = styled(Content)`
     flex: 1;
-    padding: 0 20px;
+    padding: 5px 20px;
     position: relative;
     // background: #eef0ed;
     overflow-y: auto;
@@ -64,20 +66,26 @@ const StyledFooter = styled(Footer)`
 	}
 `
 
-const ConversationView = ({ activeChat }) => {
+const ConversationView = ({ activeChat, location }) => {
+    const screens = useBreakpoint();
+    const isMobile = checkIfMobile(screens);
 
     useEffect(() => {
-        const convoContent = document.getElementById('conversation-content');
-        if (convoContent) {
-            convoContent.scrollTo({
-                left: 0,
-                top: convoContent.scrollHeight,
-                // behavior: 'smooth'
-            });
+        if (activeChat) {
+            const convoContent = document.getElementById('conversation-content');
+            if (convoContent) {
+                convoContent.scrollTo({
+                    left: 0,
+                    top: convoContent.scrollHeight,
+                    // behavior: 'smooth'
+                });
+            }
+        } else if (isMobile && !activeChat && location) {
+            console.log(location.pathname)
         }
     }, [activeChat])
 
-    if (!activeChat) {
+    if (!isMobile && !activeChat) {
         return (
             <Layout style={{ height: '100%', borderRadius: '8px', justifyContent: 'center', alignItems: 'center' }}>
                 <Empty image={NoMessagesSvg} imageStyle={{ height: 200, marginBottom: 20 }} description='Select a chat to view messages!' />
@@ -86,16 +94,16 @@ const ConversationView = ({ activeChat }) => {
     }
 
     return (
-        <Layout style={{ height: '100%', borderRadius: '8px', position: 'relative' }}>
+        <Layout style={{ height: isMobile ? '100vh' : '100%', borderRadius: '8px', position: 'relative' }}>
             <DoodleUnderlay />
             <StyledHeader>
-                <MessageHeader contact={activeChat} />
+                <ConversationHeader contact={activeChat || {}} />
             </StyledHeader>
             <StyledContent id='conversation-content'>
-                <MessageContent />
+                <ConversationContent />
             </StyledContent>
             <StyledFooter>
-                <MessageInput />
+                <ConversationInput />
             </StyledFooter>
         </Layout>
     )

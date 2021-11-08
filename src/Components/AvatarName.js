@@ -15,11 +15,25 @@ const StyledAvatar = styled(Avatar)`
     position: initial;
 `
 
-const AvatarName = ({ name, avatar, space = 'large' }) => {
+const StyledContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    & > span:first-child {
+        line-height: 20px;
+    }
+    & > span:last-child {
+        line-height: 2;
+    }
+`
+
+const AvatarName = ({ name, description, avatar, space = 'large' }) => {
     return (
         <StyledSpace size={space} align='center'>
             <StyledAvatar src={avatar} size={50} />
-            <Text level={3}>{name}</Text>
+            <StyledContent>
+                <Text level={3}>{name}</Text>
+                <Text type='secondary'>{description}</Text>
+            </StyledContent>
         </StyledSpace>
     )
 }

@@ -62,7 +62,7 @@ const ConversationInput = ({ userId, activeChatId, allChats, updateChat }) => {
 
 	const handleSendMessage = () => {
 		const convoObj = {
-			text: userMessage,
+			text: userMessage.trim(),
 			sender: userId,
 			receiver: activeChatId,
 			timestamp: Date.now(),

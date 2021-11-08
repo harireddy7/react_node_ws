@@ -1,0 +1,77 @@
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import { useContext, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import ConversationView from '../Components/ConversationUI/ConversationView';
+import ImpulseSocket, { SocketContext } from '../Components/ImpulseSocket';
+import { fetchChats, setActiveChat } from '../redux/actions/chats';
+import { fetchContacts } from '../redux/actions/contacts';
+import { setLoggedUser } from '../redux/actions/user';
+import { checkIfMobile } from '../utils';
+
+const Conversation = ({ userId, contactsState, chatsState, location, setUser, storeActiveChat, getChats, getContacts }) => {
+    const screens = useBreakpoint();
+    const isMobile = checkIfMobile(screens);
+    const { activeChat } = chatsState;
+
+    useEffect(() => {
+        const userObj = localStorage.getItem('user');
+		if (!userObj) return;
+        const { id } = JSON.parse(userObj);
+        if (id ){
+            setUser(JSON.parse(userObj));
+        }
+		const { data: contacts } = contactsState;
+		const { data: chats } = chatsState;
+
+		if (
+			!contactsState.loading &&
+			!contactsState.error &&
+			!Array.isArray(contacts)
+		) {
+			getContacts(id);
+		}
+		if (
+			!chatsState.loading &&
+			!chatsState.error &&
+			!chats
+		) {
+			getChats(id);
+		}
+    }, [])
+
+    useEffect(() => {
+        if (!activeChat && location.pathname.startsWith('/chat/')) {
+            storeActiveChat(location.pathname.substring(6))
+        }
+    }, [])
+
+    if (!isMobile) return null;
+
+    return (
+        <ImpulseSocket id={userId}>
+            <ConversationView data-name="conversation" />
+        </ImpulseSocket>
+    )
+}
+
+const mapStateToProps = (state) => {
+    // activeChat
+
+    return {
+        contactsState: state.contacts,
+        chatsState: state.chats,
+        userId: state.user.data?.mobile
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setUser: (user) => dispatch(setLoggedUser(user)),
+        getContacts: (id) => dispatch(fetchContacts(id)),
+		getChats: (id) => dispatch(fetchChats(id)),
+        storeActiveChat: (id) => dispatch(setActiveChat(id)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Conversation);

@@ -4,6 +4,9 @@ import { Menu } from 'antd';
 import AvatarName from '../AvatarName';
 import { setActiveChat } from '../../redux/actions/chats';
 import { setActiveContact } from '../../redux/actions/contacts';
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import { checkIfMobile } from '../../utils';
+import { useHistory } from 'react-router-dom';
 
 const MenuItem = styled(Menu.Item)`
 	height: 70px !important;
@@ -12,19 +15,32 @@ const MenuItem = styled(Menu.Item)`
 	}
 `;
 
-const ChatsList = ({ chatsState, contactsState, storeActiveChat, storeActiveContact }) => {
+const ChatsList = ({
+	chatsState,
+	contactsState,
+	storeActiveChat,
+	storeActiveContact,
+}) => {
 	const { data: allChats } = chatsState;
 	const { data: allContacts } = contactsState;
+	const screens = useBreakpoint();
+	const isMobile = checkIfMobile(screens);
+	const history = useHistory()
 
 	if (chatsState.loading) {
 		return <div>Loading...</div>;
-    }
+	}
 
-    const handleMenuClick = ({ key }) => {
-        // console.log(key);
+	const handleMenuClick = ({ key }) => {
+		// console.log(key);
 		if (key && chatsState.activeChat !== key) {
-            storeActiveContact(null);
+			storeActiveContact(null);
 			storeActiveChat(key);
+		}
+		if (key) {
+			if (isMobile) {
+				history.push(`/chat/${key}`);
+			}
 		}
 	};
 
@@ -36,15 +52,22 @@ const ChatsList = ({ chatsState, contactsState, storeActiveChat, storeActiveCont
 					selectedKeys={[chatsState.activeChat]}
 					onClick={handleMenuClick}
 				>
-					<MenuItem disabled key='disabled-key'>
-						Search bar
-					</MenuItem>
+					{!isMobile && (
+						<MenuItem disabled key='disabled-key'>
+							Search bar
+						</MenuItem>
+					)}
 					{Object.keys(allChats).map((receiver) => {
 						const { name, image } =
 							allContacts?.find((c) => c.mobile === receiver) || {};
+						const { text } = allChats[receiver][allChats[receiver].length - 1];
 						return (
 							<MenuItem key={receiver}>
-								<AvatarName name={name || receiver} avatar={image} />
+								<AvatarName
+									name={name || receiver}
+									avatar={image}
+									description={text}
+								/>
 							</MenuItem>
 						);
 					})}
@@ -63,8 +86,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-        storeActiveChat: (id) => dispatch(setActiveChat(id)),
-        storeActiveContact: (id) => dispatch(setActiveContact(id)),
+		storeActiveChat: (id) => dispatch(setActiveChat(id)),
+		storeActiveContact: (id) => dispatch(setActiveContact(id)),
 	};
 };
 

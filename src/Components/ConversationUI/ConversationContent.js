@@ -23,7 +23,7 @@ const Message = styled.div`
 	min-width: 80px;
 	max-width: 420px;
 	padding: 8px 12px 10px;
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 	background: ${({ type }) => (type === 'SENT' ? '#d3eebe' : '#d9e5cf')};
 	border-radius: 0 8px 8px;
 	position: relative;
@@ -49,6 +49,9 @@ const Message = styled.div`
 	}
 	@media (min-width: 768px) and (max-width: 1024px) {
 		max-width: 250px;
+	}
+	& div.ant-typography, .ant-typography p {
+		margin-bottom: 7px;
 	}
 `;
 
@@ -145,16 +148,6 @@ const messages = [
 ];
 
 const MessageContent = ({ chatMessages, userId, receiverId }) => {
-	// const { socket } = useContext(SocketContext);
-	// useEffect(() => {
-	// 	if (!socket) return;
-
-	// 	socket.on('outputMessage', (data) => {
-	// 		console.log(data);
-	// 	});
-	// 	return () => socket.off('outputMessage');
-	// }, []);
-
 	return (
 		<ConversationContainer>
 			{chatMessages.map((message, index) => (
@@ -176,7 +169,7 @@ const mapStateToProps = (state) => {
 	const chatMessages = chats.data?.[chats.activeChat] || [];
 	return {
 		chatMessages,
-		userId: state.user.data.mobile,
+		userId: state.user.data?.mobile,
 		receiverId: state.chats.activeChat,
 	};
 };

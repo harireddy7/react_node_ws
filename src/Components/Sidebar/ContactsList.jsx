@@ -4,6 +4,9 @@ import { Menu } from 'antd';
 import AvatarName from '../AvatarName';
 import { setActiveChat } from '../../redux/actions/chats';
 import { setActiveContact } from '../../redux/actions/contacts';
+import { useHistory } from 'react-router-dom';
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import { checkIfMobile } from '../../utils';
 
 const MenuItem = styled(Menu.Item)`
 	height: 70px !important;
@@ -20,6 +23,10 @@ const ContactsList = ({
 	setActiveTab,
 }) => {
 	const { data: allContacts } = contactsState;
+
+	const history = useHistory();
+	const screens = useBreakpoint();
+	const isMobile = checkIfMobile(screens);
 
 	if (contactsState.loading) {
 		return <div>Loading...</div>;
@@ -40,10 +47,17 @@ const ContactsList = ({
 				const isConvoExist = chatIds.length && chatIds.includes(key);
 				if (isConvoExist) {
 					storeActiveChat(key);
-					setActiveTab('2');
+					if (isMobile) {
+						history.push(`/chat/${key}`);
+					} else {
+						setActiveTab('2');
+					}
 				} else {
 					storeActiveContact(key);
 					storeActiveChat(key);
+					if (isMobile) {
+						history.push(`/chat/${key}`);
+					}
 				}
 			}
 		}
@@ -57,9 +71,11 @@ const ContactsList = ({
 					selectedKeys={[contactsState.activeContact]}
 					onClick={handleMenuClick}
 				>
-					<MenuItem disabled key='disabled-key'>
-						Search bar
-					</MenuItem>
+					{!isMobile && (
+						<MenuItem disabled key='disabled-key'>
+							Search bar
+						</MenuItem>
+					)}
 					{allContacts.map((contact) => (
 						<MenuItem key={contact.mobile}>
 							<AvatarName name={contact.name} avatar={contact.image} />

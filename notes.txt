@@ -69,3 +69,17 @@ Content:
     contacts: []
 
 */
+
+
+common
+    header => hide if route is /chat/:id
+    footer
+
+/login
+
+/home
+    contacts
+    chats
+    
+/chat/:id
+    conversation
