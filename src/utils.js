@@ -26,7 +26,15 @@ export const insertIntoMessages = ({ data, allChats = {}, type }) => {
 
     revisedChats[key] = [...currentChat];
 
-    return revisedChats;
+    const newChats = {
+        [key]: revisedChats[key]
+    };
+
+    Object.keys(revisedChats).filter(id => id !== key).forEach(chat => {
+        newChats[chat] = revisedChats[chat];
+    })
+
+    return newChats;
 };
 
 export const getFirstName = name => {
