@@ -2,13 +2,11 @@ import { useContext, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Tabs } from 'antd';
-import { Menu } from 'antd';
-import AvatarName from '../AvatarName';
-import { fetchChats, setActiveChat } from '../../redux/actions/chats';
-import { fetchContacts } from '../../redux/actions/contacts';
 import ChatsList from './ChatsList';
 import ContactsList from './ContactsList';
-import { SocketContext } from '../ImpulseSocket';
+import { AuthContext } from '../../Context/AuthContext';
+import { fetchChats, setActiveChat } from '../../redux/actions/chats';
+import { fetchContacts } from '../../redux/actions/contacts';
 
 const SidebarContainer = styled.div`
 	& .ant-tabs-nav-list {
@@ -25,14 +23,12 @@ const SidebarContainer = styled.div`
 
 const Sidebar = ({ contactsState, chatsState, getContacts, getChats }) => {
 	const [activeTab, setActiveTab] = useState('2');
+	const { user: { mobile: userId } = {} } = useContext(AuthContext);
 
 	// check for tab change
 	// check for contacts/chats from reducer & make api calls to fetch
 
 	useEffect(() => {
-		const userObj = localStorage.getItem('user');
-		if (!userObj) return;
-		const { id } = JSON.parse(userObj);
 		const { data: contacts } = contactsState;
 		const { data: chats } = chatsState;
 
@@ -41,14 +37,14 @@ const Sidebar = ({ contactsState, chatsState, getContacts, getChats }) => {
 			!contactsState.error &&
 			!Array.isArray(contacts)
 		) {
-			getContacts(id);
+			getContacts(userId);
 		}
 		if (
 			!chatsState.loading &&
 			!chatsState.error &&
 			!chats
 		) {
-			getChats(id);
+			getChats(userId);
 		}
 
 	}, []);

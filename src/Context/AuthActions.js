@@ -1,7 +1,13 @@
-import { axiosInstance } from '../../config/axiosInstance';
-import { SET_LOGGED_USER, GET_USER_LOADING, GET_USER_SUCCESS, GET_USER_FAILURE } from '../types';
+import { axiosInstance } from '../config/axiosInstance';
 
-export const fetchLoggedUser = (id, history) => (dispatch) => {
+export const SET_LOGGED_USER = 'SET_LOGGED_USER';
+
+export const GET_USER_LOADING = 'GET_USER_LOADING';
+export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
+export const GET_USER_FAILURE = 'GET_USER_FAILURE';
+
+
+export const fetchLoggedUser = (id, history, dispatch) => {
     dispatch({
         type: GET_USER_LOADING,
     });
@@ -20,8 +26,3 @@ export const fetchLoggedUser = (id, history) => (dispatch) => {
         });
     })
 }
-
-export const setLoggedUser = payload => ({
-    type: SET_LOGGED_USER,
-    payload,
-});

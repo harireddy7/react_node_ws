@@ -1,9 +1,9 @@
 import { Input, Button } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { useState } from 'react';
-import { connect } from 'react-redux';
-import { fetchLoggedUser } from '../redux/actions/user';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../Context/AuthContext'
+import { fetchLoggedUser } from '../Context/AuthActions'
 
 const FlexContainer = styled.div`
 	width: 100%;
@@ -33,11 +33,11 @@ const HelperText = styled.div`
     margin: 5px 0;
 `;
 
-const Login = (props) => {
+const Login = ({ history }) => {
 	const [mobileNumber, setMobileNumber] = useState('');
 	const [helperType, setHelperType] = useState('');
 
-    const { history, getLoggedUser } = props;
+    const { setUserContext } = useContext(AuthContext);
 
 	const handleChange = (e) => {
 		const { value } = e.target;
@@ -50,9 +50,8 @@ const Login = (props) => {
 	const handleLogin = () => {
 		if (mobileNumber && mobileNumber.toString().length === 10) {
 			setHelperType('');
-			// console.log('Logged in with: ', mobileNumber);
 
-			getLoggedUser(mobileNumber, history);
+			fetchLoggedUser(mobileNumber, history, setUserContext);
 		} else {
 			setHelperType('error');
 		}
@@ -85,8 +84,5 @@ const Login = (props) => {
 	);
 };
 
-const mapDispatchToProps = (dispatch) => ({
-	getLoggedUser: (id, history) => dispatch(fetchLoggedUser(id, history)),
-})
 
-export default connect(null, mapDispatchToProps)(Login);
+export default Login;

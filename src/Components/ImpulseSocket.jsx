@@ -34,13 +34,13 @@ const ImpulseSocket = ({ id, children, allChats, activeChat, allContacts, update
                     show notification, only if message received from is not activeChat
                 */
 
-                if (activeChat !== data.sender) {
-                    notification.open({
-                        message: allContacts.find(c => c.mobile === data.sender)?.name || 'New Message',
-                        description: data.text,
-                        duration: 2
-                    })
-                }
+                // if (activeChat !== data.sender) {
+                //     notification.open({
+                //         message: allContacts.find(c => c.mobile === data.sender)?.name || 'New Message',
+                //         description: data.text,
+                //         duration: 2
+                //     })
+                // }
                 updateChat({
                     data,
                     allChats,

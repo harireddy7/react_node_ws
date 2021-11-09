@@ -1,10 +1,11 @@
 import { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { Button } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import SendOutlined from '@ant-design/icons/SendOutlined';
-import { Button } from 'antd';
 import { SocketContext } from '../ImpulseSocket';
+import { AuthContext } from '../../Context/AuthContext';
 import { updateChatMessages } from '../../redux/actions/chats';
 
 const FlexContainer = styled.div`
@@ -51,10 +52,11 @@ const SendMessageButton = styled(Button)`
 	}
 `;
 
-const ConversationInput = ({ userId, activeChatId, allChats, updateChat }) => {
+const ConversationInput = ({ activeChatId, allChats, updateChat }) => {
 	const [userMessage, setUserMessage] = useState('');
 
 	const { socket } = useContext(SocketContext);
+	const { user: { mobile: userId } } = useContext(AuthContext);
 
 	const handleChange = (e) => {
 		setUserMessage(e.target.value);
@@ -100,7 +102,6 @@ const ConversationInput = ({ userId, activeChatId, allChats, updateChat }) => {
 const mapStateToProps = state => {
 	return {
 		allChats: state.chats.data || {},
-		userId: state.user.data?.mobile,
 		activeChatId: state.chats.activeChat,
 	}
 }

@@ -1,26 +1,21 @@
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { useContext, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import ConversationView from '../Components/ConversationUI/ConversationView';
-import ImpulseSocket, { SocketContext } from '../Components/ImpulseSocket';
+import ImpulseSocket from '../Components/ImpulseSocket';
+import { AuthContext } from '../Context/AuthContext';
 import { fetchChats, setActiveChat } from '../redux/actions/chats';
 import { fetchContacts } from '../redux/actions/contacts';
-import { setLoggedUser } from '../redux/actions/user';
 import { checkIfMobile } from '../utils';
 
-const Conversation = ({ userId, contactsState, chatsState, location, setUser, storeActiveChat, getChats, getContacts }) => {
+const Conversation = ({ contactsState, chatsState, location, storeActiveChat, getChats, getContacts }) => {
     const screens = useBreakpoint();
     const isMobile = checkIfMobile(screens);
     const { activeChat } = chatsState;
+    const { user: { mobile: userId } = {} } = useContext(AuthContext);
 
     useEffect(() => {
-        const userObj = localStorage.getItem('user');
-		if (!userObj) return;
-        const { id } = JSON.parse(userObj);
-        if (id ){
-            setUser(JSON.parse(userObj));
-        }
+
 		const { data: contacts } = contactsState;
 		const { data: chats } = chatsState;
 
@@ -29,14 +24,14 @@ const Conversation = ({ userId, contactsState, chatsState, location, setUser, st
 			!contactsState.error &&
 			!Array.isArray(contacts)
 		) {
-			getContacts(id);
+			getContacts(userId);
 		}
 		if (
 			!chatsState.loading &&
 			!chatsState.error &&
 			!chats
 		) {
-			getChats(id);
+			getChats(userId);
 		}
     }, [])
 
@@ -61,13 +56,11 @@ const mapStateToProps = (state) => {
     return {
         contactsState: state.contacts,
         chatsState: state.chats,
-        userId: state.user.data?.mobile
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setUser: (user) => dispatch(setLoggedUser(user)),
         getContacts: (id) => dispatch(fetchContacts(id)),
 		getChats: (id) => dispatch(fetchChats(id)),
         storeActiveChat: (id) => dispatch(setActiveChat(id)),

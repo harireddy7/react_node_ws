@@ -1,10 +1,10 @@
+import { useContext } from 'react';
 import { connect } from 'react-redux';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import Text from 'antd/lib/typography/Text';
 import styled from 'styled-components';
+import { AuthContext } from '../../Context/AuthContext';
 import { formatTimestamp } from '../../utils';
-import { useContext, useEffect } from 'react';
-import { SocketContext } from '../ImpulseSocket';
 
 // f5f7fb
 // rx: #d9e5cf, sent: #d3eebe
@@ -147,7 +147,9 @@ const messages = [
 	},
 ];
 
-const MessageContent = ({ chatMessages, userId, receiverId }) => {
+const MessageContent = ({ chatMessages, receiverId }) => {
+	const { user: { mobile: userId } = {} } = useContext(AuthContext);
+
 	return (
 		<ConversationContainer>
 			{chatMessages.map((message, index) => (
@@ -169,7 +171,6 @@ const mapStateToProps = (state) => {
 	const chatMessages = chats.data?.[chats.activeChat] || [];
 	return {
 		chatMessages,
-		userId: state.user.data?.mobile,
 		receiverId: state.chats.activeChat,
 	};
 };
