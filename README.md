@@ -3,7 +3,7 @@
 Messenger app
 
 
-Live App - [ImpulseChat](impulse-chat.herokuapp.com)
+Live App - [ImpulseChat](https://impulse-chat.herokuapp.com/)
 
 ## Available Scripts
 
