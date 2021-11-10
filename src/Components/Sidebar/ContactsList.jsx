@@ -46,6 +46,7 @@ const ContactsList = ({
 				const chatIds = Object.keys(allChats);
 				const isConvoExist = chatIds.length && chatIds.includes(key);
 				if (isConvoExist) {
+					storeActiveContact(null);
 					storeActiveChat(key);
 					if (isMobile) {
 						history.push(`/chat/${key}`);

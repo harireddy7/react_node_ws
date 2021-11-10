@@ -70,21 +70,6 @@ const ConversationView = ({ activeChat, location }) => {
     const screens = useBreakpoint();
     const isMobile = checkIfMobile(screens);
 
-    useEffect(() => {
-        if (activeChat) {
-            const convoContent = document.getElementById('conversation-content');
-            if (convoContent) {
-                convoContent.scrollTo({
-                    left: 0,
-                    top: convoContent.scrollHeight,
-                    // behavior: 'smooth'
-                });
-            }
-        } else if (isMobile && !activeChat && location) {
-            console.log(location.pathname)
-        }
-    }, [activeChat])
-
     if (!isMobile && !activeChat) {
         return (
             <Layout style={{ height: '100%', borderRadius: '8px', justifyContent: 'center', alignItems: 'center' }}>

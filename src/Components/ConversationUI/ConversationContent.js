@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useEffect, useContext, useRef } from 'react';
 import { connect } from 'react-redux';
 import Paragraph from 'antd/lib/typography/Paragraph';
 import Text from 'antd/lib/typography/Text';
@@ -149,11 +149,16 @@ const messages = [
 
 const MessageContent = ({ chatMessages, receiverId }) => {
 	const { user: { mobile: userId } = {} } = useContext(AuthContext);
+	const scrollRef = useRef();
+
+	useEffect(() => {
+		scrollRef.current?.scrollIntoView();
+	}, [chatMessages])
 
 	return (
 		<ConversationContainer>
 			{chatMessages.map((message, index) => (
-				<MessageContainer key={index} type={message.type}>
+				<MessageContainer key={index} type={message.type} ref={scrollRef}>
 					<Message type={message.type}>
 						<Paragraph>{message.text}</Paragraph>
 						<MessageTime type='secondary'>
