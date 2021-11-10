@@ -1,18 +1,22 @@
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { Menu } from 'antd';
+import { Menu, Space } from 'antd';
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import Input from 'antd/lib/input/Input';
 import AvatarName from '../AvatarName';
 import { setActiveChat } from '../../redux/actions/chats';
 import { setActiveContact } from '../../redux/actions/contacts';
-import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { checkIfMobile } from '../../utils';
-import { useHistory } from 'react-router-dom';
 
 const MenuItem = styled(Menu.Item)`
 	height: 70px !important;
 	& > span {
 		// padding: 5px;
 	}
+	// & .ant-menu-item:hover:hover {
+	// 	background: #e6f7ff !important;
+	// }
 `;
 
 const ChatsList = ({
@@ -53,9 +57,9 @@ const ChatsList = ({
 					onClick={handleMenuClick}
 				>
 					{!isMobile && (
-						<MenuItem disabled key='disabled-key'>
-							Search bar
-						</MenuItem>
+						<Space style={{ padding: '5px' }}>
+							<Input placeholder='Search bar' />
+						</Space>
 					)}
 					{Object.keys(allChats).map((receiver) => {
 						const { name, image } =

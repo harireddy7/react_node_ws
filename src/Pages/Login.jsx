@@ -3,7 +3,7 @@ import { UserOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext'
-import { fetchLoggedUser } from '../Context/AuthActions'
+import { loginUser } from '../Context/AuthActions'
 
 const FlexContainer = styled.div`
 	width: 100%;
@@ -51,7 +51,8 @@ const Login = ({ history }) => {
 		if (mobileNumber && mobileNumber.toString().length === 10) {
 			setHelperType('');
 
-			fetchLoggedUser(mobileNumber, history, setUserContext);
+			// login user
+			loginUser(mobileNumber, setUserContext);
 		} else {
 			setHelperType('error');
 		}

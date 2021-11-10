@@ -1,6 +1,5 @@
 const path = require('path');
 const express = require('express');
-const socketIO = require('socket.io');
 const cors = require('cors');
 
 // routers
@@ -27,12 +26,6 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-const PORT = process.env.PORT || 8080;
-const server = app.listen(
-	PORT,
-	console.log(`App is listening on port ${PORT}`)
-);
-
 // API ROUTES
 app.use('/api/v1/user', usersRouter);
 app.use('/api/v1/chats', chatsRouter);
@@ -46,29 +39,4 @@ app.use('/*', (req, res) => {
 app.use(express.static(path.join(__dirname, '../build')));
 app.use('/*', express.static(path.join(__dirname, '../build')));
 
-const io = socketIO(server, {
-	cors: {
-		origin: '*',
-	},
-});
-
-io.on('connection', (socket) => {
-	// console.log('new connection made...SOCKET ID:: ', socket.id);
-	const id = socket.handshake.query.id;
-	socket.join(id);
-
-	// handle chat message from client
-    socket.on('inputMessage', data => {
-		const { text, sender, receiver, timestamp } = data;
-		const emitObj = {
-			text,
-			sender,
-			receiver,
-			timestamp,
-		}
-		socket.broadcast.to(receiver).emit('outputMessage', emitObj);
-		
-        // socket.broadcast.emit('output', data);
-	})
-
-});
+module.exports = app;

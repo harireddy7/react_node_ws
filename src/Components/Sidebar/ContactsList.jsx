@@ -1,12 +1,16 @@
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { Menu } from 'antd';
+import { Button, Menu, Space } from 'antd';
+import Input from 'antd/lib/input/Input';
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import UserAddOutlined from '@ant-design/icons/UserAddOutlined';
 import AvatarName from '../AvatarName';
 import { setActiveChat } from '../../redux/actions/chats';
 import { setActiveContact } from '../../redux/actions/contacts';
-import { useHistory } from 'react-router-dom';
-import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { checkIfMobile } from '../../utils';
+import ContactModal from './ContactModal';
 
 const MenuItem = styled(Menu.Item)`
 	height: 70px !important;
@@ -15,6 +19,14 @@ const MenuItem = styled(Menu.Item)`
 	}
 `;
 
+const SearchContainer = styled(Space)`
+	width: 100%;
+	padding: 5px 10px;
+	& .ant-space-item:first-child {
+		width: 100%;
+	}
+`
+
 const ContactsList = ({
 	contactsState,
 	allChats,
@@ -22,11 +34,17 @@ const ContactsList = ({
 	storeActiveContact,
 	setActiveTab,
 }) => {
+	const [visible, setVisible] = useState(false);
 	const { data: allContacts } = contactsState;
 
 	const history = useHistory();
 	const screens = useBreakpoint();
 	const isMobile = checkIfMobile(screens);
+
+	useEffect(() => {
+		const sideEl = document.querySelector('.ant-layout-sider')
+		if (sideEl) sideEl.style.pointerEvents = visible ? 'none' : 'all';
+	}, [visible])
 
 	if (contactsState.loading) {
 		return <div>Loading...</div>;
@@ -72,11 +90,12 @@ const ContactsList = ({
 					selectedKeys={[contactsState.activeContact]}
 					onClick={handleMenuClick}
 				>
-					{!isMobile && (
-						<MenuItem disabled key='disabled-key'>
-							Search bar
-						</MenuItem>
-					)}
+					{/* {!isMobile && ( */}
+						<SearchContainer>
+							<Input placeholder='Search bar' />
+							<Button shape="circle" icon={<UserAddOutlined />} onClick={() => setVisible(true)} />
+						</SearchContainer>
+					{/* )} */}
 					{allContacts.map((contact) => (
 						<MenuItem key={contact.mobile}>
 							<AvatarName name={contact.name} avatar={contact.image} />
@@ -84,6 +103,7 @@ const ContactsList = ({
 					))}
 				</Menu>
 			)}
+			{visible && <ContactModal visible={visible} setVisible={setVisible} />}
 		</>
 	);
 };

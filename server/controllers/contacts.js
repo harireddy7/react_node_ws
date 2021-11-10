@@ -4,17 +4,6 @@ const axios = require('axios');
 
 const CONTACTS = JSON.parse(fs.readFileSync(path.join(__dirname, '../dev-data/random-users.json'), 'utf-8'))
 
-const getUserInfo = (req, res) => {
-    const id = req.params.id;
-    const userObj = CONTACTS.filter(contact => contact.mobile === id)[0] || null;
-
-    res.status(200).json({
-        status: 'success',
-        data: userObj
-    })
-
-}
-
 const getContactsDev = (req, res) => {
     const userId = req.params.id;
     res.status(200).json({
@@ -54,5 +43,4 @@ const getRandomContacts = (req, res) => {
 module.exports = {
     getContactsDev,
     getRandomContacts,
-    getUserInfo,
 }

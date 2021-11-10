@@ -20,3 +20,9 @@ code {
   top: 0;
   z-index: 999999;
 }
+
+@media (max-width: 767px) {
+  .ant-modal {
+    padding: 0 20px;
+  }
+}

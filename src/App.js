@@ -12,7 +12,8 @@ import Conversation from './Pages/Conversation';
 import ImpulseSocket from './Components/ImpulseSocket';
 import { AuthContext } from './Context/AuthContext';
 import { SET_LOGGED_USER } from './Context/AuthActions';
-import { checkIfMobile, getActiveBreakpoint } from './utils';
+import { checkIfMobile, getActiveBreakpoint, isProfilePicPresent } from './utils';
+import { UserOutlined } from '@ant-design/icons';
 
 const StyledText = styled(Text)`
 	color: ${({ color }) => color || '#fff'};
@@ -48,8 +49,15 @@ const App = () => {
 							<StyledText strong>ImpulseChat</StyledText>
 						</Col>
 						<Col xs={12} md={14} />
-						<Col xs={4} md={4} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', cursor: 'pointer' }} onClick={handleLogout}>
-							{user && <Avatar size={isMobile ? 'default' : 'large'} src={user.image} />}
+						<Col xs={4} md={4} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+							{user && (
+								<Avatar
+									size={isMobile ? 'default' : 'large'}
+									{...isProfilePicPresent(user.image) ? { src: user.image } : { icon: <UserOutlined /> }}
+									onClick={handleLogout}
+									style={{ cursor: 'pointer', background: '#2c3e50' }}
+								/>
+							)}
 						</Col>
 					</Row>
 				</StyledHeader>

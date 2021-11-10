@@ -46,6 +46,8 @@ export const getFirstName = (name) => {
 	return name.split(' ')[0];
 };
 
+export const isProfilePicPresent = image => image && image.endsWith(/(.jpg|.jpeg|.png)/);
+
 export const checkIfMobile = (screens) => {
 	const breakpoints = Object.keys(screens).filter((scr) => screens[scr]);
 	const activeBreakpoint = breakpoints[breakpoints.length - 1];

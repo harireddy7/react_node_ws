@@ -1,8 +1,10 @@
 const express = require('express');
-const { getUserInfo } = require('../controllers/contacts');
+const { getUserInfo, addNewUser } = require('../controllers/user');
 
 const router = express.Router();
 
-router.get('/:id', getUserInfo);
+router.route('/').post(addNewUser);
+
+router.route('/:id').get(getUserInfo);
 
 module.exports = router;
