@@ -11,12 +11,12 @@ const app = express();
 
 app.use(express.json());
 
-const whitelistUrl = 'https://impulse-chat.herokuapp.com/';
+const whitelistUrl = 'https://impulse-chat.herokuapp.com';
 var corsOptions = {
 	origin: function(origin, callback) {
 		if (process.env.NODE_ENV === 'development') {
 			callback(null, true)
-		} else if (origin === whitelistUrl || origin === undefined) {
+		} else if (origin.startsWith(whitelistUrl) || origin === undefined) {
 			callback(null, true);
 		} else {
 			callback(new Error('Not allowed by CORS!'));
