@@ -1,6 +1,7 @@
 import { Space } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import Text from 'antd/lib/typography/Text';
+import { UserOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const StyledSpace = styled(Space)`
@@ -26,10 +27,16 @@ const StyledContent = styled.div`
     }
 `
 
+const props = {}
+
 const AvatarName = ({ name, description, avatar, space = 'large' }) => {
     return (
         <StyledSpace size={space} align='center'>
-            <StyledAvatar src={avatar} size={50} />
+            <StyledAvatar
+                src={avatar}
+                {...avatar ? { src: avatar } : { icon: <UserOutlined style={{ fontSize: '24px' }} /> }}
+                size={50}
+            />
             <StyledContent>
                 <Text level={3}>{name}</Text>
                 <Text type='secondary'>{description}</Text>

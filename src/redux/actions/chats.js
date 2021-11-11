@@ -4,7 +4,8 @@ import {
     SET_ACTIVE_CHAT,
     SET_CHATS_LOADING,
     SET_CHATS_SUCCESS,
-    SET_CHATS_FAILURE
+    SET_CHATS_FAILURE,
+    RESET_CHATS,
 } from '../types';
 
 export const fetchChats = (id) => (dispatch) => {
@@ -29,6 +30,12 @@ export const setActiveChat = (payload) => {
     return {
         type: SET_ACTIVE_CHAT,
         payload
+    }
+}
+
+export const resetChats = (payload) => {
+    return {
+        type: RESET_CHATS,
     }
 }
 

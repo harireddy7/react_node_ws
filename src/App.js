@@ -1,19 +1,21 @@
 import { useContext } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import {connect} from 'react-redux';
 import styled from 'styled-components';
 import { Col, Row } from 'antd';
 import Layout, { Header } from 'antd/lib/layout/layout';
 import Text from 'antd/lib/typography/Text';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import { UserOutlined } from '@ant-design/icons';
 import Avatar from 'antd/lib/avatar/avatar';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Conversation from './Pages/Conversation';
-import ImpulseSocket from './Components/ImpulseSocket';
 import { AuthContext } from './Context/AuthContext';
 import { SET_LOGGED_USER } from './Context/AuthActions';
+import { resetChats } from './redux/actions/chats';
+import { resetContacts } from './redux/actions/contacts';
 import { checkIfMobile, getActiveBreakpoint, isProfilePicPresent } from './utils';
-import { UserOutlined } from '@ant-design/icons';
 
 const StyledText = styled(Text)`
 	color: ${({ color }) => color || '#fff'};
@@ -25,7 +27,7 @@ const StyledHeader = styled(Header)`
 	}
 `;
 
-const App = () => {
+const App = ({ resetStore }) => {
 	const screens = useBreakpoint();
 	const isMobile = checkIfMobile(screens);
 	const pathname = window.location.pathname;
@@ -34,6 +36,9 @@ const App = () => {
 	const { user, setUserContext } = useContext(AuthContext);
 
 	const handleLogout = () => {
+		// reset context
+		// reset store
+		resetStore();
 		setUserContext({
 			type: SET_LOGGED_USER,
 			payload: null,
@@ -79,4 +84,13 @@ const App = () => {
 	);
 };
 
-export default App;
+const mapDispatchToProps = dispatch => {
+	return {
+		resetStore: () => {
+			dispatch(resetChats());
+			dispatch(resetContacts());
+		}
+	}
+}
+
+export default connect(null, mapDispatchToProps)(App);

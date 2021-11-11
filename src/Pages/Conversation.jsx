@@ -12,7 +12,7 @@ const Conversation = ({ contactsState, chatsState, location, storeActiveChat, ge
     const screens = useBreakpoint();
     const isMobile = checkIfMobile(screens);
     const { activeChat } = chatsState;
-    const { user: { mobile: userId } = {} } = useContext(AuthContext);
+    const { user: { _id: userId, mobile } = {} } = useContext(AuthContext);
 
     useEffect(() => {
 
@@ -31,7 +31,7 @@ const Conversation = ({ contactsState, chatsState, location, storeActiveChat, ge
 			!chatsState.error &&
 			!chats
 		) {
-			getChats(userId);
+			getChats(mobile);
 		}
     }, [])
 

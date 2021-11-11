@@ -1,8 +1,11 @@
-import { useReducer, useState } from 'react';
+import { useContext, useEffect, useReducer, useState } from 'react';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { Modal, Button, Input } from 'antd';
 import PhoneOutlined from '@ant-design/icons/PhoneOutlined';
 import UserOutlined from '@ant-design/icons/UserOutlined';
-import styled from 'styled-components';
+import { createNewContact } from '../../redux/actions/contacts';
+import { AuthContext } from '../../Context/AuthContext';
 
 const ModalContainer = styled.div`
 	position: fixed;
@@ -26,10 +29,19 @@ const HelperText = styled.div`
     margin: 5px 0 15px;
 `;
 
-const ContactModal = ({ visible, setVisible }) => {
-    const [loading, setLoading] = useState(false);
+const ContactModal = ({ visible, setVisible, addContactState, createContact }) => {
+	const { loading, error, done } = addContactState;
+
+	const { user: { _id } } = useContext(AuthContext);
+
     const [helperObj, setHelperObj] = useReducer((state, newState) => ({ ...state, ...newState }), { name: '', mobile: '' });
     const [state, setState] = useReducer((state, newState) => ({ ...state, ...newState }), { name: '', mobile: '' });
+
+	useEffect(() => {
+		if (done) {
+			setVisible(false);
+		}
+	}, [done])
 
     if (!visible) return null;
 
@@ -73,7 +85,8 @@ const ContactModal = ({ visible, setVisible }) => {
         }
 
         if (name && name.length > 0 && name.length <= 20 && mobile && mobile.length === 10) {
-            console.log({name: name.trim(), mobile});
+			console.log({name: name.trim(), mobile});
+			createContact({ id: _id, name: name.trim(), mobile });
         }
 	};
 
@@ -92,14 +105,14 @@ const ContactModal = ({ visible, setVisible }) => {
 				title='Add new contact'
 				onCancel={handleCancel}
 				footer={[
-					<Button key='cancel' onClick={handleCancel}>
+					<Button key='cancel' onClick={handleCancel} disabled={loading}>
 						Cancel
 					</Button>,
 					<Button
 						key='submit'
 						type='primary'
 						loading={loading}
-						onClick={handleOk}
+						onClick={handleAddContact}
 					>
 						Add Contact
 					</Button>,
@@ -124,9 +137,23 @@ const ContactModal = ({ visible, setVisible }) => {
 					prefix={<PhoneOutlined />}
 				/>
 				<HelperText type={helperObj.mobile}>Mobile number should be 10 digits!</HelperText>
+
+				{error && <HelperText type='error'>{error}</HelperText>}
 			</Modal>
 		</ModalContainer>
 	);
 };
 
-export default ContactModal;
+const mapStateToProps = (state) => {
+	return {
+		addContactState: state.contacts.addContact,
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		createContact: (data) => dispatch(createNewContact(data)),
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactModal);

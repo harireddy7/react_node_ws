@@ -1,4 +1,5 @@
 import { axiosInstance } from '../config/axiosInstance';
+import { SET_CONTACTS_SUCCESS } from '../redux/types';
 
 export const SET_LOGGED_USER = 'SET_LOGGED_USER';
 
@@ -18,6 +19,10 @@ export const loginUser = (id, dispatch) => {
         dispatch({
             type: GET_USER_SUCCESS,
             payload: userObj
+        });
+        dispatch({
+            type: SET_CONTACTS_SUCCESS,
+            payload: userObj?.contacts,
         });
     }).catch(err => {
         console.log(err);

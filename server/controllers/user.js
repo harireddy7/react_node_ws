@@ -17,7 +17,7 @@ const getUserInfo = (req, res) => {
 // CREATE NEW USER
 const addNewUser = async (req, res) => {
     try {
-        const users = await User.find({ mobile: req.body.mobile });
+        const users = await User.find({ mobile: req.body.mobile }).select('-contacts -chats');
 
         let user = users[0];
         if (!user) {

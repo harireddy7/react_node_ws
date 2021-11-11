@@ -30,6 +30,7 @@
   "scripts": {
     "client": "REACT_APP_NODE_ENV=development react-scripts start",
     "serve": "NODE_ENV=development nodemon server/server.js",
+    "serve-debug": "NODE_ENV=development ndb server/server.js",
     "app": "REACT_APP_NODE_ENV=development NODE_ENV=development npm run start-client && npm run serve",
     "start": "node server/server.js",
     "build": "react-scripts build",
@@ -55,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "ndb": "^1.1.5",
     "nodemon": "^2.0.14"
   }
 }

@@ -16,7 +16,7 @@ var corsOptions = {
 	origin: function(origin, callback) {
 		if (process.env.NODE_ENV === 'development') {
 			callback(null, true)
-		} else if (origin.startsWith(whitelistUrl) || origin === undefined) {
+		} else if (origin === undefined || (origin && origin.startsWith(whitelistUrl))) {
 			callback(null, true);
 		} else {
 			callback(new Error('Not allowed by CORS!'));

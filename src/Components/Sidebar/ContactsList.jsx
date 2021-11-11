@@ -25,7 +25,7 @@ const SearchContainer = styled(Space)`
 	& .ant-space-item:first-child {
 		width: 100%;
 	}
-`
+`;
 
 const ContactsList = ({
 	contactsState,
@@ -42,9 +42,9 @@ const ContactsList = ({
 	const isMobile = checkIfMobile(screens);
 
 	useEffect(() => {
-		const sideEl = document.querySelector('.ant-layout-sider')
+		const sideEl = document.querySelector('.ant-layout-sider');
 		if (sideEl) sideEl.style.pointerEvents = visible ? 'none' : 'all';
-	}, [visible])
+	}, [visible]);
 
 	if (contactsState.loading) {
 		return <div>Loading...</div>;
@@ -84,25 +84,27 @@ const ContactsList = ({
 
 	return (
 		<>
-			{!contactsState.loading && allContacts?.length && (
+			<SearchContainer>
+				<Input placeholder='Search bar' />
+				<Button
+					shape='circle'
+					icon={<UserAddOutlined />}
+					onClick={() => setVisible(true)}
+				/>
+			</SearchContainer>
+			{(!contactsState.loading && allContacts?.length) ? (
 				<Menu
 					mode='inline'
 					selectedKeys={[contactsState.activeContact]}
 					onClick={handleMenuClick}
 				>
-					{/* {!isMobile && ( */}
-						<SearchContainer>
-							<Input placeholder='Search bar' />
-							<Button shape="circle" icon={<UserAddOutlined />} onClick={() => setVisible(true)} />
-						</SearchContainer>
-					{/* )} */}
 					{allContacts.map((contact) => (
 						<MenuItem key={contact.mobile}>
 							<AvatarName name={contact.name} avatar={contact.image} />
 						</MenuItem>
 					))}
 				</Menu>
-			)}
+			) : <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '50px' }}>No contacts, add some here!</div>}
 			{visible && <ContactModal visible={visible} setVisible={setVisible} />}
 		</>
 	);

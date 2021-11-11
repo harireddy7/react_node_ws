@@ -23,7 +23,7 @@ const SidebarContainer = styled.div`
 
 const Sidebar = ({ contactsState, chatsState, getContacts, getChats }) => {
 	const [activeTab, setActiveTab] = useState('2');
-	const { user: { mobile: userId } = {} } = useContext(AuthContext);
+	const { user: { _id: userId, mobile } = {} } = useContext(AuthContext);
 
 	// check for tab change
 	// check for contacts/chats from reducer & make api calls to fetch
@@ -44,7 +44,7 @@ const Sidebar = ({ contactsState, chatsState, getContacts, getChats }) => {
 			!chatsState.error &&
 			!chats
 		) {
-			getChats(userId);
+			getChats(mobile);
 		}
 
 	}, []);
